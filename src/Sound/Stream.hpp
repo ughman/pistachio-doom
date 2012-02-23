@@ -13,7 +13,7 @@ namespace Sound
 
 		Stream(void *UserData) : UserData(UserData) {}
 
-		virtual size_t Play(unsigned char *Output,size_t OutLength) = 0;
+		virtual size_t Play(float *Output,size_t OutLength) = 0;
 		virtual Stream *Copy(void *UserData) = 0;
 
 		virtual ~Stream() {}

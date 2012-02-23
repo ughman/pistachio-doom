@@ -10,7 +10,7 @@ Length(Length)
 {
 }
 
-size_t Sound::PCMStream::Play(unsigned char *Output,size_t OutLength)
+size_t Sound::PCMStream::Play(float *Output,size_t OutLength)
 {
 	if (Length == 0)
 	{
@@ -18,7 +18,10 @@ size_t Sound::PCMStream::Play(unsigned char *Output,size_t OutLength)
 	}
 	else if (Length <= OutLength)
 	{
-		Memory::Copy(Output,Buffer,Length);
+		for (size_t i = 0;i < Length;i++)
+		{
+			Output[i] += (signed short)Buffer[i] - 128;
+		}
 		Length = 0;
 		Memory::Free(Buffer);
 		Buffer = 0;
@@ -26,7 +29,10 @@ size_t Sound::PCMStream::Play(unsigned char *Output,size_t OutLength)
 	}
 	else
 	{
-		Memory::Copy(Output,Buffer,OutLength);
+		for (size_t i = 0;i < OutLength;i++)
+		{
+			Output[i] += (signed short)Buffer[i] - 128;
+		}
 		Memory::Move(Buffer,Buffer + OutLength,Length - OutLength);
 		Buffer = (unsigned char *)Memory::Reallocate(Buffer,Length - OutLength);
 		Length -= OutLength;

@@ -16,7 +16,7 @@ namespace Sound
 	public:
 		explicit PCMStream(void *UserData,unsigned char *Buffer,size_t Length);
 
-		virtual size_t Play(unsigned char *Output,size_t OutLength);
+		virtual size_t Play(float *Output,size_t OutLength);
 		virtual PCMStream *Copy(void *UserData);
 
 		virtual ~PCMStream();

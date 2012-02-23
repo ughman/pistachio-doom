@@ -16,7 +16,7 @@ namespace Sound
 
 		PtrList <Stream> Channels;
 	public:
-		void Callback(unsigned char *Stream,int OutLength);
+		void Callback(signed short *Stream,int OutLength);
 
 		SDLSystem();
 

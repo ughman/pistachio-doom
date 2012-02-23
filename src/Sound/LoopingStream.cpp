@@ -7,7 +7,7 @@ Current(0)
 {
 }
 
-size_t Sound::LoopingStream::Play(unsigned char *Output,size_t OutLength)
+size_t Sound::LoopingStream::Play(float *Output,size_t OutLength)
 {
 	size_t Result = OutLength;
 	size_t Played = 0;

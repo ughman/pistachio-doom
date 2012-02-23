@@ -16,7 +16,7 @@ namespace Sound
 	public:
 		LoopingStream(void *UserData,Stream *S);
 
-		virtual size_t Play(unsigned char *Output,size_t OutLength);
+		virtual size_t Play(float *Output,size_t OutLength);
 		virtual LoopingStream *Copy(void *UserData);
 
 		virtual ~LoopingStream();

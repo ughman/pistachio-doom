@@ -1,3 +1,5 @@
+#include <limits.h>
+
 #include "../Memory.hpp"
 #include "../Exception.hpp"
 #include "SDLSystem.hpp"
@@ -10,26 +12,24 @@ struct SDLStream
 
 static void AudioCallback(void *Sys,unsigned char *Output,int OutLength)
 {
-	((Sound::SDLSystem *)Sys)->Callback(Output,OutLength);
+	((Sound::SDLSystem *)Sys)->Callback((signed short *)Output,OutLength / 2);
 }
 
-void Sound::SDLSystem::Callback(unsigned char *Output,int OutLength)
+void Sound::SDLSystem::Callback(signed short *Output,int OutLength)
 {
-	Memory::Set(Output,0,OutLength);
 	size_t ChannelCount = Channels.Count();
-	unsigned char *X = new unsigned char [OutLength];
+	float *X = new float [OutLength];
+	for (size_t i = 0;i < OutLength;i++)
+	{
+		X[i] = 0.f;
+	}
 	try
 	{
 		PtrLink <Sound::Stream> *Prev = 0;
 		PtrLink <Sound::Stream> *This = Channels.Front;
 		while (This)
 		{
-			size_t Played = This->Value->Play(X,OutLength);
-			if (Played > 0)
-			{
-				SDL_MixAudio(Output,X,Played,SDL_MIX_MAXVOLUME);
-			}
-			else
+			if (!This->Value->Play(X,OutLength))
 			{
 				PtrLink <Sound::Stream> *Next = This->Next;
 				This->Next = 0;
@@ -47,6 +47,32 @@ void Sound::SDLSystem::Callback(unsigned char *Output,int OutLength)
 			}
 			Prev = This;
 			This = This->Next;
+		}
+		float Limit = 256.f;
+		for (size_t i = 0;i < OutLength;i++)
+		{
+			if (X[i] < -Limit)
+			{
+				Limit = -X[i];
+			}
+			else if (X[i] > Limit)
+			{
+				Limit = X[i];
+			}
+		}
+		if (Limit > 0)
+		{
+			for (size_t i = 0;i < OutLength;i++)
+			{
+				Output[i] = X[i] * SHRT_MAX / Limit;
+			}
+		}
+		else
+		{
+			for (size_t i = 0;i < OutLength;i++)
+			{
+				Output[i] = 0;
+			}
 		}
 	}
 	catch (...)
@@ -67,7 +93,7 @@ Sound::SDLSystem::SDLSystem()
 	{
 		SDL_AudioSpec Spec;
 		Spec.freq = 11025;
-		Spec.format = AUDIO_U8;
+		Spec.format = AUDIO_S16SYS;
 		Spec.channels = 1;
 		Spec.samples = 128;
 		Spec.callback = AudioCallback;
