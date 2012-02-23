@@ -1,13 +1,16 @@
+# Doom game data
 *.wad
+*.lmp
+
+# Doom saved games
+*.dsg
+
+# Linker output
 *.exe
 *.pdb
-*.dsg
-*.dll
 *.ilk
 *.lib
 *.exp
-win32/Debug
-win32/Release
-win32/*.ncb
-win32/*.suo
-win32/*.vcproj.*
+
+# Any included libraries
+*.dll
