@@ -1,3 +1,4 @@
+#include "Memory.hpp"
 #include "Video/System.hpp"
 #include "Video/SDLSystem.hpp"
 
@@ -68,7 +69,7 @@ extern "C" void I_FinishUpdate()
 
 extern "C" void I_ReadScreen(byte *scr)
 {
-	video->Read(scr);
+	Memory::Copy(scr,screens[0],SCREENWIDTH * SCREENHEIGHT);
 }
 
 extern "C" void I_SetPalette(byte *palette)
