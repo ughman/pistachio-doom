@@ -3,11 +3,22 @@
 #include "../Memory.hpp"
 #include "PCMStream.hpp"
 
-Sound::PCMStream::PCMStream(void *UserData,unsigned char *Buffer,size_t Length) :
+Sound::PCMStream::PCMStream(void *UserData,signed char *Buffer,size_t Length) :
 Sound::Stream(UserData) ,
-Buffer(Buffer) ,
+Buffer((signed char *)Buffer) ,
 Length(Length)
 {
+}
+
+Sound::PCMStream::PCMStream(void *UserData,unsigned char *Buffer,size_t Length) :
+Sound::Stream(UserData) ,
+Buffer((signed char *)Buffer) ,
+Length(Length)
+{
+	for (size_t i = 0;i < Length;i++)
+	{
+		Buffer[i] -= 128;
+	}
 }
 
 size_t Sound::PCMStream::Play(float *Output,size_t OutLength)
@@ -20,7 +31,7 @@ size_t Sound::PCMStream::Play(float *Output,size_t OutLength)
 	{
 		for (size_t i = 0;i < Length;i++)
 		{
-			Output[i] += (signed short)Buffer[i] - 128;
+			Output[i] += Buffer[i];
 		}
 		Length = 0;
 		Memory::Free(Buffer);
@@ -31,10 +42,10 @@ size_t Sound::PCMStream::Play(float *Output,size_t OutLength)
 	{
 		for (size_t i = 0;i < OutLength;i++)
 		{
-			Output[i] += (signed short)Buffer[i] - 128;
+			Output[i] += Buffer[i];
 		}
 		Memory::Move(Buffer,Buffer + OutLength,Length - OutLength);
-		Buffer = (unsigned char *)Memory::Reallocate(Buffer,Length - OutLength);
+		Buffer = (signed char *)Memory::Reallocate(Buffer,Length - OutLength);
 		Length -= OutLength;
 		return OutLength;
 	}
@@ -42,7 +53,7 @@ size_t Sound::PCMStream::Play(float *Output,size_t OutLength)
 
 Sound::PCMStream *Sound::PCMStream::Copy(void *UserData)
 {
-	using (unsigned char *NewBuffer = new unsigned char [Length])
+	using (signed char *NewBuffer = new signed char [Length])
 	{
 		Memory::Copy(NewBuffer,Buffer,Length);
 		return new Sound::PCMStream(UserData,NewBuffer,Length);

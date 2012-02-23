@@ -1,3 +1,4 @@
+#include "Memory.hpp"
 #include "Sound/System.hpp"
 #include "Sound/SDLSystem.hpp"
 #include "Sound/PCMStream.hpp"
@@ -68,7 +69,9 @@ extern "C" void S_StartSound(void *origin,int id)
 		using (Data = new unsigned char [Length])
 		{
 			W_ReadLump(sfx->lumpnum,Data);
-			S = new Sound::PCMStream(0,Data,Length);
+			Memory::Move(Data,Data + 8,Length - 8);
+			Data = (unsigned char *)Memory::Reallocate(Data,Length - 8);
+			S = new Sound::PCMStream(0,Data,Length - 8);
 		}
 		end_using_array(Data);
 		sfx->data = S;

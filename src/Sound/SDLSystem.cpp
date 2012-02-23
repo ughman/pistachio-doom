@@ -1,5 +1,6 @@
 #include <limits.h>
 
+#include "../Math.hpp"
 #include "../Memory.hpp"
 #include "../Exception.hpp"
 #include "SDLSystem.hpp"
@@ -17,14 +18,13 @@ static void AudioCallback(void *Sys,unsigned char *Output,int OutLength)
 
 void Sound::SDLSystem::Callback(signed short *Output,int OutLength)
 {
-	size_t ChannelCount = Channels.Count();
 	float *X = new float [OutLength];
-	for (size_t i = 0;i < OutLength;i++)
-	{
-		X[i] = 0.f;
-	}
 	try
 	{
+		for (size_t i = 0;i < OutLength;i++)
+		{
+			X[i] = 0.f;
+		}
 		PtrLink <Sound::Stream> *Prev = 0;
 		PtrLink <Sound::Stream> *This = Channels.Front;
 		while (This)
@@ -48,31 +48,17 @@ void Sound::SDLSystem::Callback(signed short *Output,int OutLength)
 			Prev = This;
 			This = This->Next;
 		}
-		float Limit = 256.f;
+		float Limit = 127.f;
 		for (size_t i = 0;i < OutLength;i++)
 		{
-			if (X[i] < -Limit)
+			if (Math::Absolute(X[i]) > Limit)
 			{
-				Limit = -X[i];
-			}
-			else if (X[i] > Limit)
-			{
-				Limit = X[i];
+				Limit = Math::Absolute(X[i]);
 			}
 		}
-		if (Limit > 0)
+		for (size_t i = 0;i < OutLength;i++)
 		{
-			for (size_t i = 0;i < OutLength;i++)
-			{
-				Output[i] = X[i] * SHRT_MAX / Limit;
-			}
-		}
-		else
-		{
-			for (size_t i = 0;i < OutLength;i++)
-			{
-				Output[i] = 0;
-			}
+			Output[i] = X[i] * SHRT_MAX / Limit;
 		}
 	}
 	catch (...)
