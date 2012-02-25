@@ -39,7 +39,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				PreprocessorDefinitions="WIN32"
-				RuntimeLibrary="3"
+				RuntimeLibrary="1"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4996,4113,4047,4297"
 				ForcedIncludeFiles="$(SolutionDir)..\src\LangExt.hpp"
@@ -108,7 +108,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="WIN32"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				DisableSpecificWarnings="4996,4113,4047,4297"
 				ForcedIncludeFiles="$(SolutionDir)..\src\LangExt.hpp"
 			/>
