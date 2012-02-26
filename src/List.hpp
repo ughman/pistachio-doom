@@ -2,6 +2,9 @@
 #define List_hpp
 
 template <typename T>
+class PtrList;
+
+template <typename T>
 class PtrLink
 {
 private:
@@ -9,14 +12,38 @@ private:
 	PtrLink <T>&operator=(const PtrLink <T> &);
 public:
 	T *Value;
+	PtrList <T> *List;
 	PtrLink <T> *Next;
+	PtrLink <T> *Prev;
 
-	PtrLink <T>(T *Value,PtrLink <T> *Next = 0) : Value(Value),Next(Next) {}
+	PtrLink(PtrList <T> *List,T *Value,PtrLink <T> *Next,PtrLink <T> *Prev) : List(List),Value(Value),Next(Next),Prev(Prev) {}
+
+	PtrLink <T> *Remove()
+	{
+		PtrLink <T> *Result = Next;
+		if (Next)
+		{
+			Next->Prev = Prev;
+		}
+		else
+		{
+			List->Back = Prev;
+		}
+		if (Prev)
+		{
+			Prev->Next = Next;
+		}
+		else
+		{
+			List->Front = Next;
+		}
+		delete this;
+		return Result;
+	}
 
 	~PtrLink()
 	{
 		delete Value;
-		delete Next;
 	}
 };
 
@@ -28,38 +55,44 @@ private:
 	PtrList <T>&operator=(const PtrList <T> &);
 public:
 	PtrLink <T> *Front;
+	PtrLink <T> *Back;
 
 	PtrList() : Front(0) {}
 
 	void Add(T *Value)
 	{
-		Front = new PtrLink<T>(Value,Front);
+		Front = new PtrLink<T>(this,Value,Front,0);
+		if (Front->Next)
+		{
+			Front->Next->Prev = Front;
+		}
+		else
+		{
+			Back = Front;
+		}
 	}
 
 	void Remove(T *Value)
 	{
-		PtrLink <T> *Prev = 0;
-		PtrLink <T> *This = Front;
-		while (This)
+		Find(Value)->Remove();
+	}
+
+	PtrLink <T> *Find(T *Value)
+	{
+		for (PtrLink <T> *it = Front;it;it = it->Next)
 		{
-			if (This->Value == Value)
+			if (it->Value == Value)
 			{
-				if (Prev)
-				{
-					Prev->Next = This->Next;
-					This->Next = 0;
-					delete This;
-				}
-				else
-				{
-					Front = This->Next;
-					This->Next = 0;
-					delete This;
-				}
-				return;
+				return it;
 			}
-			Prev = This;
-			This = This->Next;
+		}
+	}
+
+	void Clear()
+	{
+		while (Front)
+		{
+			Front->Remove();
 		}
 	}
 
@@ -75,7 +108,7 @@ public:
 
 	~PtrList()
 	{
-		delete Front;
+		Clear();
 	}
 };
 

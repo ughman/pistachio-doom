@@ -25,28 +25,16 @@ void Sound::SDLSystem::Callback(signed short *Output,int OutLength)
 		{
 			X[i] = 0.f;
 		}
-		PtrLink <Sound::Stream> *Prev = 0;
-		PtrLink <Sound::Stream> *This = Channels.Front;
-		while (This)
+		for (PtrLink <Stream> *it = Channels.Front;it;)
 		{
-			if (!This->Value->Play(X,OutLength))
+			if (it->Value->Play(X,OutLength) > 0)
 			{
-				PtrLink <Sound::Stream> *Next = This->Next;
-				This->Next = 0;
-				delete This;
-				This = Next;
-				if (Prev)
-				{
-					Prev->Next = This;
-				}
-				else
-				{
-					Channels.Front = This;
-				}
-				continue;
+				it = it->Next;
 			}
-			Prev = This;
-			This = This->Next;
+			else
+			{
+				it = it->Remove();
+			}
 		}
 		float Limit = 127.f;
 		for (size_t i = 0;i < OutLength;i++)
@@ -120,28 +108,16 @@ void Sound::SDLSystem::Stop(void *UserData)
 	SDL_LockAudio();
 	try
 	{
-		PtrLink <Sound::Stream> *Prev = 0;
-		PtrLink <Sound::Stream> *This = Channels.Front;
-		while (This)
+		for (PtrLink <Stream> *it = Channels.Front;it;)
 		{
-			if (This->Value->UserData == UserData)
+			if (it->Value->UserData == UserData)
 			{
-				PtrLink <Sound::Stream> *Next = This->Next;
-				This->Next = 0;
-				delete This;
-				This = Next;
-				if (Prev)
-				{
-					Prev->Next = This;
-				}
-				else
-				{
-					Channels.Front = This;
-				}
-				continue;
+				it = it->Remove();
 			}
-			Prev = This;
-			This = This->Next;
+			else
+			{
+				it = it->Next;
+			}
 		}
 	}
 	catch (...)
