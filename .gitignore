@@ -5,6 +5,9 @@
 # Doom saved games
 *.dsg
 
+# Doom screenshots
+DOOM*.pcx
+
 # Linker output
 *.exe
 *.pdb
