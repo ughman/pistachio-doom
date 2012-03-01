@@ -54,7 +54,7 @@ static Video::KeySym TranslateKey(SDLKey Key)
 	}
 }
 
-Video::SDLSystem::SDLSystem(int Width,int Height) :
+Video::SDLSystem::SDLSystem(int Width,int Height,bool Fullscreen) :
 Width(Width),
 Height(Height)
 {
@@ -64,7 +64,7 @@ Height(Height)
 	}
 	try
 	{
-		Screen = SDL_SetVideoMode(Width,Height,8,SDL_SWSURFACE);
+		Screen = SDL_SetVideoMode(Width,Height,8,Fullscreen ? (SDL_HWSURFACE | SDL_FULLSCREEN) : SDL_SWSURFACE);
 		if (!Screen)
 		{
 			throw Exception();

@@ -79,5 +79,5 @@ extern "C" void I_SetPalette(byte *palette)
 
 extern "C" void I_InitGraphics()
 {
-	video = new Video::SDLSystem(SCREENWIDTH,SCREENHEIGHT);
+	video = new Video::SDLSystem(SCREENWIDTH,SCREENHEIGHT,M_CheckParm("-fullscreen"));
 }

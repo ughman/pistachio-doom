@@ -18,7 +18,7 @@ namespace Video
 		int Width;
 		int Height;
 	public:
-		explicit SDLSystem(int Width,int Height);
+		explicit SDLSystem(int Width,int Height,bool Fullscreen);
 
 		virtual void Read(unsigned char *Buffer);
 		virtual void Write(unsigned char *Buffer,bool Update);
