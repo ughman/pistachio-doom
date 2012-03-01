@@ -1,8 +1,11 @@
+#include "Vector.hpp"
 #include "Memory.hpp"
 #include "Sound/System.hpp"
 #include "Sound/SDLSystem.hpp"
 #include "Sound/PCMStream.hpp"
+#include "Sound/MUSStream.hpp"
 #include "Sound/LoopingStream.hpp"
+#include "Sound/Synth/Instrument.hpp"
 
 extern "C"
 {
@@ -26,14 +29,70 @@ int snd_SfxVolume;
 
 Sound::System *sound = 0;
 
+Vector <Sound::Synth::Instrument> genmidi(175);
+
+static void S_LoadGMOperator(unsigned char *Data,Sound::Synth::Operator *O)
+{
+	O->Tremolo = Data[0] & 0x80;
+	O->Vibrato = Data[0] & 0x40;
+	O->DoSustain = Data[0] & 0x20;
+	O->KSR = Data[0] & 0x10;
+	O->Multiplier = Data[0] & 0xF;
+	if (O->Multiplier == 0)
+	{
+		O->Multiplier = 0.5f;
+	}
+	O->Attack = (Data[1] >> 4) / 15.f;
+	O->Decay = (Data[1] & 0xF) / 15.f;
+	O->Sustain = (Data[2] >> 4) / 15.f;
+	O->Release = (Data[2] & 0xF) / 15.f;
+	O->WaveformType = (Sound::Synth::WaveformType)Data[3];
+}
+
+static void S_LoadGMVoice(unsigned char *Data,Sound::Synth::Operator *Modulator,Sound::Synth::Operator *Carrier,bool *Connection,short *Offset)
+{
+	S_LoadGMOperator(Data,Modulator);
+	S_LoadGMOperator(Data + 7,Carrier);
+	*Connection = Data[6] & 0x1;
+	*Offset = Data[14];
+	*Offset |= Data[15] << 8;
+}
+
+static void S_LoadGMInstrument(unsigned char *Data,Sound::Synth::Instrument *I)
+{
+	I->FixedPitch = Data[0] & 0x1;
+	I->DoubleVoice = Data[0] & 0x4;
+	I->Tuning[0] = 0;
+	I->Tuning[1] = (signed short)Data[2] - 128;
+	I->Note = Data[3];
+	S_LoadGMVoice(Data + 4,&I->Modulator[0],&I->Carrier[0],&I->Connection[0],&I->Offset[0]);
+	S_LoadGMVoice(Data + 20,&I->Modulator[1],&I->Carrier[1],&I->Connection[1],&I->Offset[1]);
+}
+
 extern "C" void S_Init(int sfxVolume,int musicVolume)
 {
 	sound = new Sound::SDLSystem();
+	int genmidinum = W_GetNumForName("GENMIDI");
+	unsigned char *Data = new unsigned char [W_LumpLength(genmidinum)];
+	try
+	{
+		W_ReadLump(genmidinum,Data);
+		for (size_t i = 0;i < 175;i++)
+		{
+			S_LoadGMInstrument(Data + 8 + 36 * i,genmidi.Array + i);
+		}
+	}
+	catch (...)
+	{
+		delete [] Data;
+		throw;
+	}
+	delete [] Data;
 }
 
 extern "C" void S_Start()
 {
-	//sound->StopAll();
+	sound->StopAll();
 	switch (gamemode)
 	{
 	case shareware:
@@ -69,11 +128,10 @@ extern "C" void S_StartSound(void *origin,int id)
 		using (Data = new unsigned char [Length])
 		{
 			W_ReadLump(sfx->lumpnum,Data);
-			Memory::Move(Data,Data + 8,Length - 8);
-			Data = (unsigned char *)Memory::Reallocate(Data,Length - 8);
-			S = new Sound::PCMStream(0,Data,Length - 8);
+			S = new Sound::PCMStream(0,Data + 8,Length - 8);
 		}
 		end_using_array(Data);
+		delete [] Data;
 		sfx->data = S;
 	}
 	sound->Play(S,origin);
@@ -116,7 +174,6 @@ extern "C" void S_StartMusic(int id)
 
 extern "C" void S_ChangeMusic(int id,int looping)
 {
-	return;
 	musicinfo_t *music = S_music + id;
 	Sound::Stream *S = (Sound::Stream *)music->data;
 	sound->Stop(sound);
@@ -133,10 +190,14 @@ extern "C" void S_ChangeMusic(int id,int looping)
 		size_t Length = W_LumpLength(music->lumpnum);
 		using (Data = new unsigned char [Length])
 		{
+			unsigned short InstrumentCount;
 			W_ReadLump(music->lumpnum,Data);
-			S = new Sound::PCMStream(0,Data,Length);
+			InstrumentCount  = Data[12];
+			InstrumentCount |= Data[13] << 8;
+			S = new Sound::MUSStream(0,Data + 16 + InstrumentCount * 2,Length - 16 - InstrumentCount * 2,genmidi);
 		}
 		end_using_array(Data);
+		delete [] Data;
 		using (S)
 		{
 			if (looping)

@@ -15,6 +15,8 @@ namespace Sound
 
 		virtual void Play(Stream *S,void *UserData) = 0;
 		virtual void Stop(void *UserData) = 0;
+		virtual void StopAll() = 0;
+
 		virtual void Update() = 0;
 
 		virtual ~System() {}

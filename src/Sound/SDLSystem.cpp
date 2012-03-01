@@ -5,10 +5,18 @@
 #include "../Exception.hpp"
 #include "SDLSystem.hpp"
 
-struct SDLStream
+class SDLAudioLock
 {
-	size_t Length;
-	unsigned char Data[];
+public:
+	SDLAudioLock()
+	{
+		SDL_LockAudio();
+	}
+
+	~SDLAudioLock()
+	{
+		SDL_UnlockAudio();
+	}
 };
 
 static void AudioCallback(void *Sys,unsigned char *Output,int OutLength)
@@ -88,44 +96,32 @@ void Sound::SDLSystem::Play(Sound::Stream *S,void *UserData)
 {
 	using (Sound::Stream *NS = S->Copy(UserData))
 	{
-		SDL_LockAudio();
-		try
-		{
-			Channels.Add(NS);
-		}
-		catch (...)
-		{
-			SDL_UnlockAudio();
-			throw;
-		}
-		SDL_UnlockAudio();
+		SDLAudioLock SAL;
+		Channels.Add(NS);
 	}
 	end_using(NS);
 }
 
 void Sound::SDLSystem::Stop(void *UserData)
 {
-	SDL_LockAudio();
-	try
+	SDLAudioLock SAL;
+	for (PtrLink <Stream> *it = Channels.Front;it;)
 	{
-		for (PtrLink <Stream> *it = Channels.Front;it;)
+		if (it->Value->UserData == UserData)
 		{
-			if (it->Value->UserData == UserData)
-			{
-				it = it->Remove();
-			}
-			else
-			{
-				it = it->Next;
-			}
+			it = it->Remove();
+		}
+		else
+		{
+			it = it->Next;
 		}
 	}
-	catch (...)
-	{
-		SDL_UnlockAudio();
-		throw;
-	}
-	SDL_UnlockAudio();
+}
+
+void Sound::SDLSystem::StopAll()
+{
+	SDLAudioLock SAL;
+	Channels.Clear();
 }
 
 void Sound::SDLSystem::Update()

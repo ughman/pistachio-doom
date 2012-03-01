@@ -4,6 +4,8 @@
 namespace Math
 {
 	float Absolute(float Value);
+	float Power(float Base,float Exponent);
+	float Sine(float Value);
 }
 
 #endif

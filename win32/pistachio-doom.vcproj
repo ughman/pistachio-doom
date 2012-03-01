@@ -190,6 +190,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\Sound\MUSStream.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Sound\MUSStream.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\Sound\PCMStream.cpp"
 				>
 			</File>
@@ -232,6 +240,38 @@
 				</File>
 				<File
 					RelativePath="..\src\Sound\SDLSystem.hpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Synth"
+				>
+				<File
+					RelativePath="..\src\Sound\Synth\Channel.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Sound\Synth\Channel.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Sound\Synth\Instrument.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Sound\Synth\Operator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Sound\Synth\Operator.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Sound\Synth\Voice.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Sound\Synth\Voice.hpp"
 					>
 				</File>
 			</Filter>
@@ -954,6 +994,14 @@
 		</File>
 		<File
 			RelativePath="..\src\Memory.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\src\Memory.hpp"
+			>
+		</File>
+		<File
+			RelativePath="..\src\Vector.hpp"
 			>
 		</File>
 	</Files>

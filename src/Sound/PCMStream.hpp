@@ -1,6 +1,7 @@
 #ifndef Sound_PCMStream_hpp
 #define Sound_PCMStream_hpp
 
+#include "../Vector.hpp"
 #include "Stream.hpp"
 
 namespace Sound
@@ -11,8 +12,7 @@ namespace Sound
 		PCMStream(const PCMStream &);
 		PCMStream &operator=(const PCMStream &);
 
-		signed char *Buffer;
-		size_t Length;
+		Vector <signed char> Buffer;
 	public:
 		explicit PCMStream(void *UserData,signed char *Buffer,size_t Length);
 		explicit PCMStream(void *UserData,unsigned char *Buffer,size_t Length);

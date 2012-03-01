@@ -2,6 +2,112 @@
 #define List_hpp
 
 template <typename T>
+class List;
+
+template <typename T>
+class Link
+{
+private:
+	Link(const Link <T> &);
+	Link <T>&operator=(const Link <T> &);
+public:
+	T Value;
+	List <T> *Owner;
+	Link <T> *Next;
+	Link <T> *Prev;
+
+	Link(List <T> *Owner,T Value,Link <T> *Next,Link <T> *Prev) : Owner(Owner),Value(Value),Next(Next),Prev(Prev) {}
+
+	Link <T> *Remove()
+	{
+		Link <T> *Result = Next;
+		if (Next)
+		{
+			Next->Prev = Prev;
+		}
+		else
+		{
+			Owner->Back = Prev;
+		}
+		if (Prev)
+		{
+			Prev->Next = Next;
+		}
+		else
+		{
+			Owner->Front = Next;
+		}
+		delete this;
+		return Result;
+	}
+};
+
+template <typename T>
+class List
+{
+private:
+	List <T>(const List <T> &);
+	List <T>&operator=(const List <T> &);
+public:
+	Link <T> *Front;
+	Link <T> *Back;
+
+	List() : Front(0) {}
+
+	void Add(T Value)
+	{
+		Front = new Link<T>(this,Value,Front,0);
+		if (Front->Next)
+		{
+			Front->Next->Prev = Front;
+		}
+		else
+		{
+			Back = Front;
+		}
+	}
+
+	void Remove(T Value)
+	{
+		Find(Value)->Remove();
+	}
+
+	Link <T> *Find(T Value)
+	{
+		for (Link <T> *it = Front;it;it = it->Next)
+		{
+			if (it->Value == Value)
+			{
+				return it;
+			}
+		}
+	}
+
+	void Clear()
+	{
+		while (Front)
+		{
+			Front->Remove();
+		}
+	}
+
+	size_t Count()
+	{
+		size_t Result = 0;
+		for (Link <T> *it = Front;it;it = it->Next)
+		{
+			Result++;
+		}
+		return Result;
+	}
+
+	~List()
+	{
+		Clear();
+	}
+};
+
+template <typename T>
 class PtrList;
 
 template <typename T>
@@ -12,11 +118,11 @@ private:
 	PtrLink <T>&operator=(const PtrLink <T> &);
 public:
 	T *Value;
-	PtrList <T> *List;
+	PtrList <T> *Owner;
 	PtrLink <T> *Next;
 	PtrLink <T> *Prev;
 
-	PtrLink(PtrList <T> *List,T *Value,PtrLink <T> *Next,PtrLink <T> *Prev) : List(List),Value(Value),Next(Next),Prev(Prev) {}
+	PtrLink(PtrList <T> *Owner,T *Value,PtrLink <T> *Next,PtrLink <T> *Prev) : Owner(Owner),Value(Value),Next(Next),Prev(Prev) {}
 
 	PtrLink <T> *Remove()
 	{
@@ -27,7 +133,7 @@ public:
 		}
 		else
 		{
-			List->Back = Prev;
+			Owner->Back = Prev;
 		}
 		if (Prev)
 		{
@@ -35,7 +141,7 @@ public:
 		}
 		else
 		{
-			List->Front = Next;
+			Owner->Front = Next;
 		}
 		delete this;
 		return Result;

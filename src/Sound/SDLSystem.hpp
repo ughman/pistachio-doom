@@ -22,6 +22,8 @@ namespace Sound
 
 		virtual void Play(Stream *S,void *UserData);
 		virtual void Stop(void *UserData);
+		virtual void StopAll();
+
 		virtual void Update();
 
 		virtual ~SDLSystem();
