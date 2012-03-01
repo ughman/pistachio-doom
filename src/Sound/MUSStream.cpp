@@ -36,8 +36,11 @@ size_t Sound::MUSStream::Play(float *Output,size_t OutLength)
 					}
 					if (Channel == 15)
 					{
-						Channels[Channel].Instrument = Instruments[Note - 35 + 128];
-						Channels[Channel].StartNote(Note,60);
+						if (Note >= 35 && Note <= 81)
+						{
+							Channels[Channel].Instrument = Instruments[Note - 35 + 128];
+							Channels[Channel].StartNote(Note,60);
+						}
 					}
 					else
 					{
