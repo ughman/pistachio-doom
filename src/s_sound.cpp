@@ -71,7 +71,7 @@ static void S_LoadGMInstrument(unsigned char *Data,Sound::Synth::Instrument *I)
 
 extern "C" void S_Init(int sfxVolume,int musicVolume)
 {
-	sound = new Sound::SDLSystem();
+	sound = new Sound::SDLSystem(snd_SfxVolume / 15.f,snd_MusicVolume / 15.f);
 	int genmidinum = W_GetNumForName("GENMIDI");
 	unsigned char *Data = new unsigned char [W_LumpLength(genmidinum)];
 	try
@@ -112,7 +112,7 @@ extern "C" void S_StartSound(void *origin,int id)
 	Sound::Stream *S = (Sound::Stream *)sfx->data;
 	if (origin)
 	{
-		sound->Stop(origin);
+		sound->StopSound(origin);
 	}
 	if (sfx->lumpnum == 0)
 	{
@@ -134,12 +134,12 @@ extern "C" void S_StartSound(void *origin,int id)
 		delete [] Data;
 		sfx->data = S;
 	}
-	sound->Play(S,origin);
+	sound->PlaySound(S,origin);
 }
 
 extern "C" void S_StopSound(void *origin)
 {
-	sound->Stop(origin);
+	sound->StopSound(origin);
 }
 
 extern "C" void S_PauseSound()
@@ -160,11 +160,13 @@ extern "C" void S_UpdateSounds(void *listener)
 extern "C" void S_SetMusicVolume(int volume)
 {
 	snd_MusicVolume = volume;
+	sound->MusicVolume = volume / 15.f;
 }
 
 extern "C" void S_SetSfxVolume(int volume)
 {
 	snd_SfxVolume = volume;
+	sound->SoundVolume = volume / 15.f;
 }
 
 extern "C" void S_StartMusic(int id)
@@ -176,7 +178,7 @@ extern "C" void S_ChangeMusic(int id,int looping)
 {
 	musicinfo_t *music = S_music + id;
 	Sound::Stream *S = (Sound::Stream *)music->data;
-	sound->Stop(sound);
+	sound->StopMusic(sound);
 	if (music->lumpnum == 0)
 	{
 		char Name[9];
@@ -208,5 +210,5 @@ extern "C" void S_ChangeMusic(int id,int looping)
 		end_using(S);
 		music->data = S;
 	}
-	sound->Play(S,sound);
+	sound->PlayMusic(S,sound);
 }

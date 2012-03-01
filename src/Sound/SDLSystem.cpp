@@ -1,6 +1,7 @@
 #include <limits.h>
 
 #include "../Math.hpp"
+#include "../Vector.hpp"
 #include "../Memory.hpp"
 #include "../Exception.hpp"
 #include "SDLSystem.hpp"
@@ -26,46 +27,58 @@ static void AudioCallback(void *Sys,unsigned char *Output,int OutLength)
 
 void Sound::SDLSystem::Callback(signed short *Output,int OutLength)
 {
-	float *X = new float [OutLength];
-	try
+	Vector <float> SoundOutput(OutLength);
+	Vector <float> MusicOutput(OutLength);
+	for (size_t i = 0;i < OutLength;i++)
 	{
-		for (size_t i = 0;i < OutLength;i++)
+		// No bounds checking
+		SoundOutput.Array[i] = 0.f;
+		MusicOutput.Array[i] = 0.f;
+	}
+	for (PtrLink <Stream> *it = Sounds.Front;it;)
+	{
+		if (it->Value->Play(SoundOutput.Array,OutLength) > 0)
 		{
-			X[i] = 0.f;
+			it = it->Next;
 		}
-		for (PtrLink <Stream> *it = Channels.Front;it;)
+		else
 		{
-			if (it->Value->Play(X,OutLength) > 0)
-			{
-				it = it->Next;
-			}
-			else
-			{
-				it = it->Remove();
-			}
-		}
-		float Limit = 127.f;
-		for (size_t i = 0;i < OutLength;i++)
-		{
-			if (Math::Absolute(X[i]) > Limit)
-			{
-				Limit = Math::Absolute(X[i]);
-			}
-		}
-		for (size_t i = 0;i < OutLength;i++)
-		{
-			Output[i] = X[i] * SHRT_MAX / Limit;
+			it = it->Remove();
 		}
 	}
-	catch (...)
+	for (PtrLink <Stream> *it = Musics.Front;it;)
 	{
-		delete [] X;
-		throw;
+		if (it->Value->Play(MusicOutput.Array,OutLength) > 0)
+		{
+			it = it->Next;
+		}
+		else
+		{
+			it = it->Remove();
+		}
 	}
-	delete [] X;
+	float SoundLimit = 127.f;
+	float MusicLimit = 127.f;
+	for (size_t i = 0;i < OutLength;i++)
+	{
+		if (Math::Absolute(SoundOutput.Array[i]) > SoundLimit)
+		{
+			SoundLimit = Math::Absolute(SoundOutput.Array[i]);
+		}
+		if (Math::Absolute(MusicOutput.Array[i]) > MusicLimit)
+		{
+			MusicLimit = Math::Absolute(MusicOutput.Array[i]);
+		}
+	}
+	for (size_t i = 0;i < OutLength;i++)
+	{
+		Output[i]  = SoundOutput.Array[i] * SHRT_MAX / 2 / SoundLimit * SoundVolume;
+		Output[i] += MusicOutput.Array[i] * SHRT_MAX / 2 / MusicLimit * MusicVolume;
+	}
 }
 
-Sound::SDLSystem::SDLSystem()
+Sound::SDLSystem::SDLSystem(float SoundVolume,float MusicVolume) :
+Sound::System(SoundVolume,MusicVolume)
 {
 	if (SDL_InitSubSystem(SDL_INIT_AUDIO) == -1)
 	{
@@ -77,8 +90,9 @@ Sound::SDLSystem::SDLSystem()
 		Spec.freq = 11025;
 		Spec.format = AUDIO_S16SYS;
 		Spec.channels = 1;
-		Spec.samples = 128;
+		Spec.samples = 256;
 		Spec.callback = AudioCallback;
+		Spec.userdata = this;
 		if (SDL_OpenAudio(&Spec,0) == -1)
 		{
 			throw Exception();
@@ -92,20 +106,46 @@ Sound::SDLSystem::SDLSystem()
 	}
 }
 
-void Sound::SDLSystem::Play(Sound::Stream *S,void *UserData)
+void Sound::SDLSystem::PlaySound(Sound::Stream *S,void *UserData)
 {
 	using (Sound::Stream *NS = S->Copy(UserData))
 	{
 		SDLAudioLock SAL;
-		Channels.Add(NS);
+		Sounds.Add(NS);
 	}
 	end_using(NS);
 }
 
-void Sound::SDLSystem::Stop(void *UserData)
+void Sound::SDLSystem::PlayMusic(Sound::Stream *S,void *UserData)
+{
+	using (Sound::Stream *NS = S->Copy(UserData))
+	{
+		SDLAudioLock SAL;
+		Musics.Add(NS);
+	}
+	end_using(NS);
+}
+
+void Sound::SDLSystem::StopSound(void *UserData)
 {
 	SDLAudioLock SAL;
-	for (PtrLink <Stream> *it = Channels.Front;it;)
+	for (PtrLink <Stream> *it = Sounds.Front;it;)
+	{
+		if (it->Value->UserData == UserData)
+		{
+			it = it->Remove();
+		}
+		else
+		{
+			it = it->Next;
+		}
+	}
+}
+
+void Sound::SDLSystem::StopMusic(void *UserData)
+{
+	SDLAudioLock SAL;
+	for (PtrLink <Stream> *it = Musics.Front;it;)
 	{
 		if (it->Value->UserData == UserData)
 		{
@@ -121,7 +161,8 @@ void Sound::SDLSystem::Stop(void *UserData)
 void Sound::SDLSystem::StopAll()
 {
 	SDLAudioLock SAL;
-	Channels.Clear();
+	Sounds.Clear();
+	Musics.Clear();
 }
 
 void Sound::SDLSystem::Update()

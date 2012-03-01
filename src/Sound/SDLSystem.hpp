@@ -14,14 +14,17 @@ namespace Sound
 		SDLSystem(const SDLSystem &);
 		SDLSystem &operator=(const SDLSystem &);
 
-		PtrList <Stream> Channels;
+		PtrList <Stream> Sounds;
+		PtrList <Stream> Musics;
 	public:
 		void Callback(signed short *Stream,int OutLength);
 
-		SDLSystem();
+		SDLSystem(float SoundVolume,float MusicVolume);
 
-		virtual void Play(Stream *S,void *UserData);
-		virtual void Stop(void *UserData);
+		virtual void PlaySound(Stream *S,void *UserData);
+		virtual void PlayMusic(Stream *S,void *UserData);
+		virtual void StopSound(void *UserData);
+		virtual void StopMusic(void *UserData);
 		virtual void StopAll();
 
 		virtual void Update();
