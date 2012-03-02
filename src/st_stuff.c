@@ -684,7 +684,7 @@ ST_Responder (event_t* ev)
       
       if (gamemode == commercial)
       {
-	epsd = 0;
+	epsd = 1;
 	map = (buf[0] - '0')*10 + buf[1] - '0';
       }
       else
@@ -714,7 +714,7 @@ ST_Responder (event_t* ev)
 	return false;
 
       if ((gamemode == commercial)
-	&& (( epsd > 1) || (map > 34)))
+	&& (( epsd > 1) || (map > 32)))
 	return false;
 
       // So be it.
