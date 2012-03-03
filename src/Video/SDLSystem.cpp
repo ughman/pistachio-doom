@@ -1,3 +1,4 @@
+#include "../Memory.hpp"
 #include "../Exception.hpp"
 #include "SDLSystem.hpp"
 
@@ -105,12 +106,9 @@ void Video::SDLSystem::Write(unsigned char *Buffer,bool Update)
 	}
 	unsigned char *Pixels = (unsigned char *)Screen->pixels;
 	short Pitch = Screen->pitch;
-	for (int x = 0;x < Width;x++)
+	for (int y = 0;y < Height;y++)
 	{
-		for (int y = 0;y < Height;y++)
-		{
-			Pixels[x + y * Pitch] = Buffer[x + y * Width];
-		}
+		Memory::Copy(Pixels + y * Pitch,Buffer + y * Width,Width);
 	}
 	SDL_UnlockSurface(Screen);
 	if (Update)
