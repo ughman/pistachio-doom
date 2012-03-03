@@ -128,7 +128,7 @@ extern "C" void S_StartSound(void *origin,int id)
 		using (Data = new unsigned char [Length])
 		{
 			W_ReadLump(sfx->lumpnum,Data);
-			S = new Sound::PCMStream(0,Data + 8,Length - 8);
+			S = new Sound::PCMStream(0,Data[2] | (Data[3] << 8),Data + 8,Length - 8);
 		}
 		end_using_array(Data);
 		delete [] Data;
