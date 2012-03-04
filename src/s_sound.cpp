@@ -98,6 +98,50 @@ extern "C" void S_Start()
 	case shareware:
 	case registered:
 	case retail:
+		switch (gameepisode)
+		{
+		case 1:
+			S_ChangeMusic(mus_e1m1 + gamemap - 1,true);
+			break;
+		case 2:
+			S_ChangeMusic(mus_e2m1 + gamemap - 1,true);
+			break;
+		case 3:
+			S_ChangeMusic(mus_e3m1 + gamemap - 1,true);
+			break;
+		case 4:
+			switch (gamemap)
+			{
+			case 1:
+				S_ChangeMusic(mus_e3m4,true);
+				break;
+			case 2:
+				S_ChangeMusic(mus_e3m2,true);
+				break;
+			case 3:
+				S_ChangeMusic(mus_e3m3,true);
+				break;
+			case 4:
+				S_ChangeMusic(mus_e1m5,true);
+				break;
+			case 5:
+				S_ChangeMusic(mus_e2m7,true);
+				break;
+			case 6:
+				S_ChangeMusic(mus_e2m4,true);
+				break;
+			case 7:
+				S_ChangeMusic(mus_e2m6,true);
+				break;
+			case 8:
+				S_ChangeMusic(mus_e2m5,true);
+				break;
+			case 9:
+				S_ChangeMusic(mus_e1m9,true);
+				break;
+			}
+			break;
+		}
 		break;
 	case commercial:
 		S_ChangeMusic(mus_runnin + gamemap - 1,true);
