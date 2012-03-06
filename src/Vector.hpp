@@ -49,7 +49,7 @@ public:
 
 	void Remove(int Start,size_t Count)
 	{
-		if (Start < 0 || Start >= Length || Start + Count > Length)
+		if (Start < 0 || Start + Count > Length)
 		{
 			throw Exception();
 		}
@@ -83,6 +83,14 @@ public:
 		{
 			return Array[Offset];
 		}
+	}
+
+	Vector <T> &operator=(const Vector <T> &Other)
+	{
+		Buffer = (T *)Memory::Reallocate(Buffer,Other.Length);
+		Length = Other.Length;
+		Memory::Move(Buffer,Other.Buffer,Length);
+		return *this;
 	}
 
 	~Vector()

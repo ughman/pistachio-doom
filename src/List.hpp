@@ -46,24 +46,31 @@ template <typename T>
 class List
 {
 private:
-	List <T>(const List <T> &);
 	List <T>&operator=(const List <T> &);
 public:
 	Link <T> *Front;
 	Link <T> *Back;
 
-	List() : Front(0) {}
+	List() : Front(0),Back(0) {}
+
+	List(const List <T> &Source) : Front(0),Back(0)
+	{
+		for (Link <T> *it = Source.Front;it;it = it->Next)
+		{
+			Add(it->Value);
+		}
+	}
 
 	void Add(T Value)
 	{
-		Front = new Link<T>(this,Value,Front,0);
-		if (Front->Next)
+		Back = new Link<T>(this,Value,0,Back);
+		if (Back->Prev)
 		{
-			Front->Next->Prev = Front;
+			Back->Prev->Next = Back;
 		}
 		else
 		{
-			Back = Front;
+			Front = Back;
 		}
 	}
 

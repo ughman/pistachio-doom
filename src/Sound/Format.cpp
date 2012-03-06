@@ -2,6 +2,7 @@
 #include "Format.hpp"
 #include "PCMStream.hpp"
 #include "MUSStream.hpp"
+#include "MIDIStream.hpp"
 
 List <Sound::Format> Sound::Formats;
 
@@ -40,4 +41,30 @@ Sound::Stream *Sound::LoadMUS(unsigned char *Data,size_t Length,const Vector <So
 	InstrumentCount |= Data[13] << 8;
 	if (Length < 16 + InstrumentCount * 2) throw Exception();
 	return new Sound::MUSStream(0,Data + 16 + InstrumentCount * 2,Length - 16 - InstrumentCount * 2,Instruments);
+}
+
+Sound::Stream *Sound::LoadMIDI(unsigned char *Data,size_t Length,const Vector <Sound::Synth::Instrument> &Instruments)
+{
+	if (Length < 14) return 0;
+	if (Data[0] != 'M') return 0;
+	if (Data[1] != 'T') return 0;
+	if (Data[2] != 'h') return 0;
+	if (Data[3] != 'd') return 0;
+	if (Data[4] != 0) return 0;
+	if (Data[5] != 0) return 0;
+	if (Data[6] != 0) return 0;
+	if (Data[7] != 6) return 0;
+	unsigned short TimeDivision;
+	TimeDivision  = Data[12] << 8;
+	TimeDivision |= Data[13];
+	if (TimeDivision & 0x8000)
+	{
+		unsigned char FPS = (TimeDivision & 0x7F00) >> 8;
+		unsigned char TPF = TimeDivision & 0xFF;
+		return new Sound::MIDIStream(0,Data + 14,Length - 14,Instruments,TPF,FPS);
+	}
+	else
+	{
+		return new Sound::MIDIStream(0,Data + 14,Length - 14,Instruments,TimeDivision,2);
+	}
 }

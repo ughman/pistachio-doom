@@ -12,7 +12,7 @@ size_t Sound::MUSStream::Play(float *Output,size_t OutLength)
 {
 	for (size_t i = 0;i < OutLength;i++)
 	{
-		while (TimeRemaining < 0)
+		while (TimeRemaining <= 0)
 		{
 			bool Last = Buffer[0] & 0x80;
 			int Command = (Buffer[0] & 0x70) >> 4;

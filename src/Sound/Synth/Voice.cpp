@@ -37,10 +37,6 @@ size_t Sound::Synth::Voice::Play(float *Output,size_t OutLength)
 		{
 			ModulatorOffset -= 1;
 		}
-		while (CarrierOffset >= 1)
-		{
-			CarrierOffset -= 1;
-		}
 		Sound::Synth::Envelope(Modulator,&ModulatorStage,&ModulatorEnvelope);
 		Sound::Synth::Envelope(Carrier,&CarrierStage,&CarrierEnvelope);
 		if (Connection)
@@ -50,6 +46,10 @@ size_t Sound::Synth::Voice::Play(float *Output,size_t OutLength)
 		else
 		{
 			Output[i] += Volume * ModulatorEnvelope * Sound::Synth::Wave(ModulatorOffset,Modulator.WaveformType);
+		}
+		while (CarrierOffset >= 1)
+		{
+			CarrierOffset -= 1;
 		}
 		Output[i] += Volume * CarrierEnvelope * Sound::Synth::Wave(CarrierOffset,Carrier.WaveformType);
 		if (CarrierStage == Sound::Synth::ADSR_DEAD)

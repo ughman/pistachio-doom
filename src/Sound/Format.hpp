@@ -16,6 +16,7 @@ namespace Sound
 
 	Sound::Stream *LoadDoomWave(unsigned char *Data,size_t Length,const Vector <Synth::Instrument> &Instruments);
 	Sound::Stream *LoadMUS     (unsigned char *Data,size_t Length,const Vector <Synth::Instrument> &Instruments);
+	Sound::Stream *LoadMIDI    (unsigned char *Data,size_t Length,const Vector <Synth::Instrument> &Instruments);
 }
 
 #endif

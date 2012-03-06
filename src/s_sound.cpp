@@ -72,6 +72,7 @@ extern "C" void S_Init(int sfxVolume,int musicVolume)
 {
 	Sound::Formats.Add(Sound::LoadDoomWave);
 	Sound::Formats.Add(Sound::LoadMUS);
+	Sound::Formats.Add(Sound::LoadMIDI);
 	sound = new Sound::SDLSystem(snd_SfxVolume / 15.f,snd_MusicVolume / 15.f);
 	int genmidinum = W_GetNumForName("GENMIDI");
 	unsigned char *Data = new unsigned char [W_LumpLength(genmidinum)];

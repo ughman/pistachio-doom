@@ -198,6 +198,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\Sound\MIDIStream.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Sound\MIDIStream.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\Sound\MUSStream.cpp"
 				>
 			</File>

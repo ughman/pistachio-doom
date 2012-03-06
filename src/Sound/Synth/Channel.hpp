@@ -16,7 +16,7 @@ namespace Sound
 			Instrument Instrument;
 			float Volume;
 
-			Channel() : Volume(0) {}
+			Channel() : Volume(100) {}
 
 			size_t Play(float *Output,size_t OutLength);
 
