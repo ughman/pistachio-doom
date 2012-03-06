@@ -170,18 +170,18 @@ public:
 	PtrLink <T> *Front;
 	PtrLink <T> *Back;
 
-	PtrList() : Front(0) {}
+	PtrList() : Front(0),Back(0) {}
 
 	void Add(T *Value)
 	{
-		Front = new PtrLink<T>(this,Value,Front,0);
-		if (Front->Next)
+		Back = new PtrLink<T>(this,Value,0,Back);
+		if (Back->Prev)
 		{
-			Front->Next->Prev = Front;
+			Back->Prev->Next = Back;
 		}
 		else
 		{
-			Back = Front;
+			Front = Back;
 		}
 	}
 
