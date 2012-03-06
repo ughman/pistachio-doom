@@ -13,10 +13,10 @@ BeatsPerSecond(BeatsPerSecond)
 	Vector <unsigned char> Buffer(Data,Length);
 	while (Buffer.Length > 0)
 	{
-		if (Buffer[0] != 'M') throw Exception();
-		if (Buffer[1] != 'T') throw Exception();
-		if (Buffer[2] != 'r') throw Exception();
-		if (Buffer[3] != 'k') throw Exception();
+		if (Buffer[0] != 'M') throw StrException("Invalid MIDI track.");
+		if (Buffer[1] != 'T') throw StrException("Invalid MIDI track.");
+		if (Buffer[2] != 'r') throw StrException("Invalid MIDI track.");
+		if (Buffer[3] != 'k') throw StrException("Invalid MIDI track.");
 		unsigned long TrackLength;
 		TrackLength  = Buffer[4] << 24;
 		TrackLength |= Buffer[5] << 16;
@@ -24,7 +24,7 @@ BeatsPerSecond(BeatsPerSecond)
 		TrackLength |= Buffer[7];
 		if (Buffer.Length < 8 + TrackLength)
 		{
-			throw Exception();
+			throw StrException("Invalid MIDI track.");
 		}
 		Tracks.Add(MIDITrack(Buffer.Array + 8,TrackLength));
 		Buffer.Remove(0,8 + TrackLength);
@@ -173,11 +173,11 @@ size_t Sound::MIDIStream::Play(float *Output,size_t OutLength)
 								}
 								break;
 							default:
-								throw Exception();
+								throw StrException("Unknown MIDI metaevent type.");
 							}
 							break;
 						default:
-							throw Exception();
+							throw StrException("Unknown MIDI event type.");
 						}
 						it->Value.Waiting = false;
 					}

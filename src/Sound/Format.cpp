@@ -15,7 +15,7 @@ Sound::Stream *Sound::Load(unsigned char *Data,size_t Length,const Vector <Sound
 			return Result;
 		}
 	}
-	throw Exception();
+	throw StrException("Unknown audio format.");
 }
 
 Sound::Stream *Sound::LoadDoomWave(unsigned char *Data,size_t Length,const Vector <Sound::Synth::Instrument> &Instruments)
@@ -39,7 +39,7 @@ Sound::Stream *Sound::LoadMUS(unsigned char *Data,size_t Length,const Vector <So
 	unsigned short InstrumentCount;
 	InstrumentCount  = Data[12];
 	InstrumentCount |= Data[13] << 8;
-	if (Length < 16 + InstrumentCount * 2) throw Exception();
+	if (Length < 16 + InstrumentCount * 2) throw StrException("Invalid MUS file.");
 	return new Sound::MUSStream(0,Data + 16 + InstrumentCount * 2,Length - 16 - InstrumentCount * 2,Instruments);
 }
 
@@ -50,10 +50,10 @@ Sound::Stream *Sound::LoadMIDI(unsigned char *Data,size_t Length,const Vector <S
 	if (Data[1] != 'T') return 0;
 	if (Data[2] != 'h') return 0;
 	if (Data[3] != 'd') return 0;
-	if (Data[4] != 0) return 0;
-	if (Data[5] != 0) return 0;
-	if (Data[6] != 0) return 0;
-	if (Data[7] != 6) return 0;
+	if (Data[4] != 0) StrException("Invalid MIDI file.");
+	if (Data[5] != 0) StrException("Invalid MIDI file.");
+	if (Data[6] != 0) StrException("Invalid MIDI file.");
+	if (Data[7] != 6) StrException("Invalid MIDI file.");
 	unsigned short TimeDivision;
 	TimeDivision  = Data[12] << 8;
 	TimeDivision |= Data[13];

@@ -61,14 +61,14 @@ Height(Height)
 {
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) == -1)
 	{
-		throw Exception();
+		throw StrException("SDL video initialization failed.");
 	}
 	try
 	{
 		Screen = SDL_SetVideoMode(Width,Height,8,Fullscreen ? (SDL_HWSURFACE | SDL_FULLSCREEN) : SDL_SWSURFACE);
 		if (!Screen)
 		{
-			throw Exception();
+			throw StrException("SDL video mode setting failed.");
 		}
 		SDL_ShowCursor(false);
 	}
@@ -83,7 +83,7 @@ void Video::SDLSystem::Read(unsigned char *Buffer)
 {
 	if (SDL_LockSurface(Screen) == -1)
 	{
-		throw Exception();
+		throw StrException("SDL surface lock failed.");
 	}
 	unsigned char *Pixels = (unsigned char *)Screen->pixels;
 	short Pitch = Screen->pitch;
@@ -102,7 +102,7 @@ void Video::SDLSystem::Write(unsigned char *Buffer,bool Update)
 {
 	if (SDL_LockSurface(Screen) == -1)
 	{
-		throw Exception();
+		throw StrException("SDL surface lock failed.");
 	}
 	unsigned char *Pixels = (unsigned char *)Screen->pixels;
 	short Pitch = Screen->pitch;
@@ -128,7 +128,7 @@ void Video::SDLSystem::SetPalette(unsigned char *Palette)
 	}
 	if (!SDL_SetColors(Screen,Colors,0,256))
 	{
-		throw Exception();
+		throw StrException("SDL palette change failed.");
 	}
 }
 

@@ -8,6 +8,14 @@ template <typename T>
 class Vector
 {
 public:
+	class BoundsException : public Exception
+	{
+	public:
+		virtual const char *Message() const { return "Vector access out of bounds."; }
+
+		virtual ~BoundsException() {}
+	};
+
 	T *Array;
 	size_t Length;
 
@@ -51,7 +59,7 @@ public:
 	{
 		if (Start < 0 || Start + Count > Length)
 		{
-			throw Exception();
+			throw BoundsException();
 		}
 		else
 		{
@@ -65,7 +73,7 @@ public:
 	{
 		if (Offset < 0 || Offset >= Length)
 		{
-			throw Exception();
+			throw BoundsException();
 		}
 		else
 		{
@@ -77,7 +85,7 @@ public:
 	{
 		if (Offset < 0 || Offset >= Length)
 		{
-			throw Exception();
+			throw BoundsException();
 		}
 		else
 		{

@@ -47,14 +47,19 @@ void Memory::Set(void *Pointer,char Value,size_t Length)
 	memset(Pointer,Value,Length);
 }
 
-void Memory::Copy(void *Destination,void *Source,size_t Length)
+void Memory::Copy(void *Destination,const void *Source,size_t Length)
 {
 	memcpy(Destination,Source,Length);
 }
 
-void Memory::Move(void *Destination,void *Source,size_t Length)
+void Memory::Move(void *Destination,const void *Source,size_t Length)
 {
 	memmove(Destination,Source,Length);
+}
+
+int Memory::Compare(const void *A,const void *B,size_t Length)
+{
+	return memcmp(A,B,Length);
 }
 
 void *operator new(size_t Size)

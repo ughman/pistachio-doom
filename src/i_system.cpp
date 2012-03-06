@@ -45,7 +45,7 @@ extern "C" void I_Init()
 {
 	if (SDL_Init(0) == -1)
 	{
-		throw Exception();
+		throw StrException("SDL initialization failed.");
 	}
 }
 
@@ -82,5 +82,5 @@ extern "C" void I_Error(char *error,...)
 	vfprintf(stderr,error,args);
 	fprintf(stderr,"\n");
 	va_end(args);
-	throw Exception();
+	throw StrException("I_Error called.");
 }

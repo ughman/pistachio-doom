@@ -82,7 +82,7 @@ Sound::System(SoundVolume,MusicVolume)
 {
 	if (SDL_InitSubSystem(SDL_INIT_AUDIO) == -1)
 	{
-		throw Exception();
+		throw StrException("SDL audio initialization failed.");
 	}
 	try
 	{
@@ -95,7 +95,7 @@ Sound::System(SoundVolume,MusicVolume)
 		Spec.userdata = this;
 		if (SDL_OpenAudio(&Spec,0) == -1)
 		{
-			throw Exception();
+			throw StrException("SDL audio mode setting failed.");
 		}
 		SDL_PauseAudio(false);
 	}

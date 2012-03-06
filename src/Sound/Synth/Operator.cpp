@@ -37,7 +37,7 @@ void Sound::Synth::Envelope(Sound::Synth::Operator Op,Sound::Synth::ADSRStage *S
 		*Envelope = 0;
 		break;
 	default:
-		throw Exception();
+		throw StrException("Unknown ADSR state.");
 	}
 }
 
@@ -55,6 +55,6 @@ float Sound::Synth::Wave(float Offset,Sound::Synth::WaveformType Type)
 	case Sound::Synth::WF_SAWTOOTH:
 		return ((Offset < .25) || ((Offset > .5) && (Offset < .75))) ? Result : 0;
 	default:
-		throw Exception();
+		throw StrException("Unknown waveform type.");
 	}
 }

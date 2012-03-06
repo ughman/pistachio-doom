@@ -67,9 +67,6 @@ size_t Sound::MUSStream::Play(float *Output,size_t OutLength)
 					case 3:
 						Channels[Channel].Volume = Value;
 						break;
-					default:
-						break;
-						throw Exception();
 					}
 					Buffer.Remove(0,3);
 				}
@@ -77,7 +74,7 @@ size_t Sound::MUSStream::Play(float *Output,size_t OutLength)
 			case 6:
 				return i;
 			default:
-				throw Exception();
+				throw StrException("Unknown MUS event type.");
 			}
 			if (Last)
 			{
