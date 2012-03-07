@@ -47,6 +47,10 @@ rcsid[] = "$Id: r_data.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 
 #include "r_data.h"
 
+#ifdef WIN32
+#define strncasecmp strnicmp
+#endif
+
 //
 // Graphics.
 // DOOM graphics for walls and sprites
@@ -701,7 +705,7 @@ int	R_CheckTextureNumForName (char *name)
 	return 0;
 		
     for (i=0 ; i<numtextures ; i++)
-	if (!strnicmp (textures[i]->name, name, 8) )
+	if (!strncasecmp (textures[i]->name, name, 8) )
 	    return i;
 		
     return -1;

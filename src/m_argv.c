@@ -30,8 +30,9 @@ rcsid[] = "$Id: m_argv.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 int		myargc;
 char**		myargv;
 
-
-
+#ifdef WIN32
+#define strcasecmp stricmp
+#endif
 
 //
 // M_CheckParm
@@ -45,7 +46,7 @@ int M_CheckParm (char *check)
 
     for (i = 1;i<myargc;i++)
     {
-	if ( !stricmp(check, myargv[i]) )
+	if ( !strcasecmp(check, myargv[i]) )
 	    return i;
     }
 
