@@ -95,9 +95,9 @@ public:
 
 	Vector <T> &operator=(const Vector <T> &Other)
 	{
-		Buffer = (T *)Memory::Reallocate(Buffer,Other.Length);
+		Array = (T *)Memory::Reallocate(Array,Other.Length);
 		Length = Other.Length;
-		Memory::Move(Buffer,Other.Buffer,Length);
+		Memory::Move(Array,Other.Array,Length);
 		return *this;
 	}
 
