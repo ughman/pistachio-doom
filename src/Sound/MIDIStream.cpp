@@ -1,6 +1,3 @@
-#include <cstdio>
-#include <cstdlib>
-
 #include "../Exception.hpp"
 #include "MIDIStream.hpp"
 
