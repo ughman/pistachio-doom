@@ -24,7 +24,7 @@ namespace Sound
 			float Decay;
 			float Sustain;
 			float Release;
-			WaveformType WaveformType;
+			Sound::Synth::WaveformType WaveformType;
 		};
 
 		enum ADSRStage

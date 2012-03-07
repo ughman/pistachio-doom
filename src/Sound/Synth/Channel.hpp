@@ -13,7 +13,7 @@ namespace Sound
 		{
 		public:
 			List <Voice> Voices;
-			Instrument Instrument;
+			Sound::Synth::Instrument Instrument;
 			float Volume;
 
 			Channel() : Volume(100) {}
