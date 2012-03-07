@@ -43,10 +43,9 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #endif
 #include "w_wad.h"
 
-
-
-
-
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
 
 //
 // GLOBALS
