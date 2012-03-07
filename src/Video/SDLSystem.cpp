@@ -36,7 +36,7 @@ static Video::KeySym TranslateKey(SDLKey Key)
 		return Video::EVK_LEFT;
 	case SDLK_RIGHT:
 		return Video::EVK_RIGHT;
-#define XLATF(id) case SDLK_F##id##: return Video::EVK_F##id
+#define XLATF(id) case SDLK_F##id: return Video::EVK_F##id
 	XLATF(1);
 	XLATF(2);
 	XLATF(3);
