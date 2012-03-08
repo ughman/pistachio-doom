@@ -14,6 +14,7 @@ namespace Sound
 			unsigned char Note;
 			float Tuning[2];
 			Operator Modulator[2];
+			float Feedback[2];
 			Operator Carrier[2];
 			bool Connection[2];
 			short Offset[2];

@@ -20,10 +20,10 @@ size_t Sound::Synth::Channel::Play(float *Output,size_t OutLength)
 void Sound::Synth::Channel::StartNote(unsigned char Note,unsigned char FreqNote)
 {
 	float Frequency = 440 * Math::Power(2,(FreqNote - 40) / 12.f);
-	Voices.Add(Voice(Instrument.Connection[0],Instrument.Modulator[0],Instrument.Carrier[0],Frequency + Instrument.Tuning[0],Volume,Note));
+	Voices.Add(Voice(Instrument.Connection[0],Instrument.Feedback[0],Instrument.Modulator[0],Instrument.Carrier[0],Frequency + Instrument.Tuning[0],Volume,Note));
 	if (Instrument.DoubleVoice)
 	{
-		Voices.Add(Voice(Instrument.Connection[1],Instrument.Modulator[1],Instrument.Carrier[1],Frequency + Instrument.Tuning[1],Volume,Note));
+		Voices.Add(Voice(Instrument.Connection[1],Instrument.Feedback[1],Instrument.Modulator[1],Instrument.Carrier[1],Frequency + Instrument.Tuning[1],Volume,Note));
 	}
 }
 

@@ -26,7 +26,7 @@ void Sound::Synth::Envelope(Sound::Synth::Operator Op,Sound::Synth::ADSRStage *S
 		*Envelope = Op.Sustain;
 		break;
 	case Sound::Synth::ADSR_RELEASE:
-		*Envelope -= Op.Release;
+		*Envelope -= Op.Release * Op.Sustain;
 		if (*Envelope <= 0)
 		{
 			*Envelope = 0;
@@ -43,6 +43,7 @@ void Sound::Synth::Envelope(Sound::Synth::Operator Op,Sound::Synth::ADSRStage *S
 
 float Sound::Synth::Wave(float Offset,Sound::Synth::WaveformType Type)
 {
+	Offset -= (int)Offset;
 	float Result = Math::Sine(Offset * 6.28318);
 	switch (Type)
 	{

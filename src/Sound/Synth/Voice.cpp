@@ -1,12 +1,12 @@
 #include "../../Math.hpp"
 #include "Voice.hpp"
 
-Sound::Synth::Voice::Voice(bool Connection,Sound::Synth::Operator Modulator,Sound::Synth::Operator Carrier,float Frequency,float Volume,unsigned char Note) :
+Sound::Synth::Voice::Voice(bool Connection,float Feedback,Sound::Synth::Operator Modulator,Sound::Synth::Operator Carrier,float Frequency,float Volume,unsigned char Note) :
 Connection(Connection) ,
+Feedback(Feedback) ,
 Modulator(Modulator) ,
 Carrier(Carrier) ,
-ModulatorOffset(0.f) ,
-CarrierOffset(0.f) ,
+Time(0.f) ,
 ModulatorStage(ADSR_ATTACK) ,
 CarrierStage(ADSR_ATTACK) ,
 ModulatorEnvelope(0.f) ,
@@ -31,27 +31,18 @@ size_t Sound::Synth::Voice::Play(float *Output,size_t OutLength)
 	}
 	for (size_t i = 0;i < OutLength;i++)
 	{
-		ModulatorOffset += Frequency * Modulator.Multiplier / 11025;
-		CarrierOffset += Frequency * Carrier.Multiplier / 11025;
-		while (ModulatorOffset >= 1)
-		{
-			ModulatorOffset -= 1;
-		}
+		Time += 1 / 11025.f;
 		Sound::Synth::Envelope(Modulator,&ModulatorStage,&ModulatorEnvelope);
 		Sound::Synth::Envelope(Carrier,&CarrierStage,&CarrierEnvelope);
 		if (Connection)
 		{
-			CarrierOffset += ModulatorEnvelope * Sound::Synth::Wave(ModulatorOffset,Modulator.WaveformType);
+			Output[i] += Volume * CarrierEnvelope * Sound::Synth::Wave(Frequency * Carrier.Multiplier * Time + (ModulatorEnvelope * Sound::Synth::Wave(Frequency * Modulator.Multiplier * Time,Modulator.WaveformType)),Carrier.WaveformType);
 		}
 		else
 		{
-			Output[i] += Volume * ModulatorEnvelope * Sound::Synth::Wave(ModulatorOffset,Modulator.WaveformType);
+			Output[i] += Volume * ModulatorEnvelope * Sound::Synth::Wave(Frequency * Modulator.Multiplier * Time,Modulator.WaveformType);
+			Output[i] += Volume * CarrierEnvelope * Sound::Synth::Wave(Frequency * Carrier.Multiplier * Time,Carrier.WaveformType);
 		}
-		while (CarrierOffset >= 1)
-		{
-			CarrierOffset -= 1;
-		}
-		Output[i] += Volume * CarrierEnvelope * Sound::Synth::Wave(CarrierOffset,Carrier.WaveformType);
 		if (CarrierStage == Sound::Synth::ADSR_DEAD)
 		{
 			return i + 1;

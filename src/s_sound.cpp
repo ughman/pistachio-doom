@@ -1,3 +1,4 @@
+#include "Math.hpp"
 #include "Vector.hpp"
 #include "Memory.hpp"
 #include "Sound/Format.hpp"
@@ -48,9 +49,36 @@ static void S_LoadGMOperator(unsigned char *Data,Sound::Synth::Operator *O)
 	O->WaveformType = (Sound::Synth::WaveformType)Data[3];
 }
 
-static void S_LoadGMVoice(unsigned char *Data,Sound::Synth::Operator *Modulator,Sound::Synth::Operator *Carrier,bool *Connection,short *Offset)
+static void S_LoadGMVoice(unsigned char *Data,Sound::Synth::Operator *Modulator,Sound::Synth::Operator *Carrier,bool *Connection,float *Feedback,short *Offset)
 {
 	S_LoadGMOperator(Data,Modulator);
+	switch ((Data[6] & 0xE) >> 1)
+	{
+	case 0:
+		*Feedback = 0;
+		break;
+	case 1:
+		*Feedback = .125;
+		break;
+	case 2:
+		*Feedback = .25;
+		break;
+	case 3:
+		*Feedback = .5;
+		break;
+	case 4:
+		*Feedback = 1;
+		break;
+	case 5:
+		*Feedback = 2;
+		break;
+	case 6:
+		*Feedback = 4;
+		break;
+	case 7:
+		*Feedback = 8;
+		break;
+	}
 	S_LoadGMOperator(Data + 7,Carrier);
 	*Connection = Data[6] & 0x1;
 	*Offset = Data[14];
@@ -64,8 +92,8 @@ static void S_LoadGMInstrument(unsigned char *Data,Sound::Synth::Instrument *I)
 	I->Tuning[0] = 0;
 	I->Tuning[1] = (signed short)Data[2] - 128;
 	I->Note = Data[3];
-	S_LoadGMVoice(Data + 4,&I->Modulator[0],&I->Carrier[0],&I->Connection[0],&I->Offset[0]);
-	S_LoadGMVoice(Data + 20,&I->Modulator[1],&I->Carrier[1],&I->Connection[1],&I->Offset[1]);
+	S_LoadGMVoice(Data + 4,&I->Modulator[0],&I->Carrier[0],&I->Connection[0],&I->Feedback[0],&I->Offset[0]);
+	S_LoadGMVoice(Data + 20,&I->Modulator[1],&I->Carrier[1],&I->Connection[1],&I->Feedback[1],&I->Offset[1]);
 }
 
 extern "C" void S_Init(int sfxVolume,int musicVolume)

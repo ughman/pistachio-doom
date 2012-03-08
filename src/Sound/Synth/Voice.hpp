@@ -11,10 +11,10 @@ namespace Sound
 		{
 		private:
 			bool Connection;
+			float Feedback;
 			Operator Modulator;
 			Operator Carrier;
-			float ModulatorOffset;
-			float CarrierOffset;
+			float Time;
 			ADSRStage ModulatorStage;
 			ADSRStage CarrierStage;
 			float ModulatorEnvelope;
@@ -25,7 +25,7 @@ namespace Sound
 			unsigned char Note;
 			bool Held;
 
-			explicit Voice(bool Connection,Operator Modulator,Operator Carrier,float Frequency,float Volume,unsigned char Note);
+			explicit Voice(bool Connection,float Feedback,Operator Modulator,Operator Carrier,float Frequency,float Volume,unsigned char Note);
 
 			size_t Play(float *Output,size_t OutLength);
 		};
