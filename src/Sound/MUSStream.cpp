@@ -6,6 +6,10 @@ Buffer(Buffer,Length) ,
 Instruments(Instruments) ,
 TimeRemaining(0)
 {
+	for (size_t i = 0;i < 16;i++)
+	{
+		Channels[i].Instrument = Instruments[0];
+	}
 }
 
 size_t Sound::MUSStream::Play(float *Output,size_t OutLength)
