@@ -959,8 +959,26 @@
 				Name="w_ Source Files"
 				>
 				<File
-					RelativePath="..\src\w_wad.c"
+					RelativePath="..\src\w_wad.cpp"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
 				</File>
 			</Filter>
 			<Filter
@@ -987,6 +1005,50 @@
 					>
 				</File>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="IO"
+			>
+			<File
+				RelativePath="..\src\IO\Archive.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\IO\Archive.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\IO\File.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\IO\File.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\IO\LumpArchive.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\IO\LumpArchive.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\IO\MultiArchive.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\IO\MultiArchive.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\IO\WADArchive.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\IO\WADArchive.hpp"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath="..\src\Exception.hpp"

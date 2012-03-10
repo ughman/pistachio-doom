@@ -217,22 +217,25 @@ void R_InitSpriteDefs (char** namelist)
 	//  filling in the frames for whatever is found
 	for (l=start+1 ; l<end ; l++)
 	{
-	    if (*(int *)lumpinfo[l].name == intname)
+		extern void W_GetNameForNum(int,char *);
+		char name[8];
+		W_GetNameForNum(l,name);
+	    if (!memcmp(name,namelist[i],4))
 	    {
-		frame = lumpinfo[l].name[4] - 'A';
-		rotation = lumpinfo[l].name[5] - '0';
+		frame = name[4] - 'A';
+		rotation = name[5] - '0';
 
 		if (modifiedgame)
-		    patched = W_GetNumForName (lumpinfo[l].name);
+		    patched = W_GetNumForName (name);
 		else
 		    patched = l;
 
 		R_InstallSpriteLump (patched, frame, rotation, false);
 
-		if (lumpinfo[l].name[6])
+		if (name[6])
 		{
-		    frame = lumpinfo[l].name[6] - 'A';
-		    rotation = lumpinfo[l].name[7] - '0';
+		    frame = name[6] - 'A';
+		    rotation = name[7] - '0';
 		    R_InstallSpriteLump (l, frame, rotation, true);
 		}
 	    }

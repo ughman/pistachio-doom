@@ -22,6 +22,11 @@ public:
 	bool operator==(const String &Other) const;
 
 	~String();
+
+	static int Compare(const char *Left,const char *Right);
+	static int ICompare(const char *Left,const char *Right);
+	static int NCompare(const char *Left,const char *Right,size_t Length);
+	static int NICompare(const char *Left,const char *Right,size_t Length);
 };
 
 #endif

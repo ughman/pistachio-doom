@@ -5,6 +5,11 @@
 #include "String.hpp"
 #include "Memory.hpp"
 
+#ifdef WIN32
+#define strcasecmp stricmp
+#define strncasecmp strnicmp
+#endif
+
 String String::Format(const char *Format,...)
 {
 	String Result;
@@ -86,4 +91,24 @@ bool String::operator==(const String &Other) const
 String::~String()
 {
 	delete [] Value;
+}
+
+int String::Compare(const char *Left,const char *Right)
+{
+	return strcmp(Left,Right);
+}
+
+int String::ICompare(const char *Left,const char *Right)
+{
+	return strcasecmp(Left,Right);
+}
+
+int String::NCompare(const char *Left,const char *Right,size_t Length)
+{
+	return strncmp(Left,Right,Length);
+}
+
+int String::NICompare(const char *Left,const char *Right,size_t Length)
+{
+	return strncasecmp(Left,Right,Length);
 }
