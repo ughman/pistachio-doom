@@ -57,8 +57,8 @@ void Sound::SDLSystem::Callback(signed short *Output,int OutLength)
 			it = it->Remove();
 		}
 	}
-	float SoundLimit = 127.f;
-	float MusicLimit = 127.f;
+	float SoundLimit = 128.f;
+	float MusicLimit = 512.f;
 	for (size_t i = 0;i < OutLength;i++)
 	{
 		if (Math::Absolute(SoundOutput.Array[i]) > SoundLimit)
