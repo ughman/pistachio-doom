@@ -182,14 +182,6 @@
 			Name="Sound"
 			>
 			<File
-				RelativePath="..\src\Sound\Format.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\Sound\Format.hpp"
-				>
-			</File>
-			<File
 				RelativePath="..\src\Sound\LoopingStream.cpp"
 				>
 			</File>
@@ -219,6 +211,10 @@
 			</File>
 			<File
 				RelativePath="..\src\Sound\PCMStream.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Sound\Stream.cpp"
 				>
 			</File>
 			<File

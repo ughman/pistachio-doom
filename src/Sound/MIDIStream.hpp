@@ -31,6 +31,8 @@ namespace Sound
 		float TicksPerBeat;
 		float BeatsPerSecond;
 	public:
+		static Stream *Load(unsigned char *Data,size_t Length,const Vector <Synth::Instrument> &Instruments);
+
 		explicit MIDIStream(void *UserData,unsigned char *Data,size_t Length,Vector <Synth::Instrument> Instruments,float TicksPerBeat,float BeatsPerSecond);
 		explicit MIDIStream(void *UserData,List <MIDITrack> Tracks,Vector <Synth::Instrument> Instruments,float TicksPerBeat,float BeatsPerSecond);
 

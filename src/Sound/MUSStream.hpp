@@ -19,6 +19,8 @@ namespace Sound
 		Synth::Channel Channels[16];
 		float TimeRemaining;
 	public:
+		static Stream *Load(unsigned char *Data,size_t Length,const Vector <Synth::Instrument> &Instruments);
+
 		explicit MUSStream(void *UserData,unsigned char *Buffer,size_t Length,const Vector <Synth::Instrument> &Instruments);
 
 		virtual size_t Play(float *Output,size_t OutLength);

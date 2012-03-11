@@ -1,6 +1,32 @@
 #include "../Exception.hpp"
 #include "MIDIStream.hpp"
 
+Sound::Stream *Sound::MIDIStream::Load(unsigned char *Data,size_t Length,const Vector <Sound::Synth::Instrument> &Instruments)
+{
+	if (Length < 14) return 0;
+	if (Data[0] != 'M') return 0;
+	if (Data[1] != 'T') return 0;
+	if (Data[2] != 'h') return 0;
+	if (Data[3] != 'd') return 0;
+	if (Data[4] != 0) StrException("Invalid MIDI file.");
+	if (Data[5] != 0) StrException("Invalid MIDI file.");
+	if (Data[6] != 0) StrException("Invalid MIDI file.");
+	if (Data[7] != 6) StrException("Invalid MIDI file.");
+	unsigned short TimeDivision;
+	TimeDivision  = Data[12] << 8;
+	TimeDivision |= Data[13];
+	if (TimeDivision & 0x8000)
+	{
+		unsigned char FPS = (TimeDivision & 0x7F00) >> 8;
+		unsigned char TPF = TimeDivision & 0xFF;
+		return new Sound::MIDIStream(0,Data + 14,Length - 14,Instruments,TPF,FPS);
+	}
+	else
+	{
+		return new Sound::MIDIStream(0,Data + 14,Length - 14,Instruments,TimeDivision,2);
+	}
+}
+
 Sound::MIDIStream::MIDIStream(void *UserData,unsigned char *Data,size_t Length,Vector <Sound::Synth::Instrument> Instruments,float TicksPerBeat,float BeatsPerSecond) :
 Sound::Stream(UserData) ,
 Instruments(Instruments) ,

@@ -1,5 +1,19 @@
 #include "MUSStream.hpp"
 
+Sound::Stream *Sound::MUSStream::Load(unsigned char *Data,size_t Length,const Vector <Sound::Synth::Instrument> &Instruments)
+{
+	if (Length < 16) return 0;
+	if (Data[0] != 'M') return 0;
+	if (Data[1] != 'U') return 0;
+	if (Data[2] != 'S') return 0;
+	if (Data[3] != 0x1A) return 0;
+	unsigned short InstrumentCount;
+	InstrumentCount  = Data[12];
+	InstrumentCount |= Data[13] << 8;
+	if (Length < 16 + InstrumentCount * 2) throw StrException("Invalid MUS file.");
+	return new Sound::MUSStream(0,Data + 16 + InstrumentCount * 2,Length - 16 - InstrumentCount * 2,Instruments);
+}
+
 Sound::MUSStream::MUSStream(void *UserData,unsigned char *Buffer,size_t Length,const Vector <Synth::Instrument> &Instruments) :
 Sound::Stream(UserData) ,
 Buffer(Buffer,Length) ,

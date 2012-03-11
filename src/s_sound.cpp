@@ -1,9 +1,11 @@
 #include "Math.hpp"
 #include "Vector.hpp"
 #include "Memory.hpp"
-#include "Sound/Format.hpp"
 #include "Sound/System.hpp"
 #include "Sound/SDLSystem.hpp"
+#include "Sound/PCMStream.hpp"
+#include "Sound/MUSStream.hpp"
+#include "Sound/MIDIStream.hpp"
 #include "Sound/LoopingStream.hpp"
 #include "Sound/Synth/Instrument.hpp"
 
@@ -98,9 +100,9 @@ static void S_LoadGMInstrument(unsigned char *Data,Sound::Synth::Instrument *I)
 
 extern "C" void S_Init(int sfxVolume,int musicVolume)
 {
-	Sound::Formats.Add(Sound::LoadDoomWave);
-	Sound::Formats.Add(Sound::LoadMUS);
-	Sound::Formats.Add(Sound::LoadMIDI);
+	Sound::Stream::Formats.Add(Sound::PCMStream::LoadDoomWave);
+	Sound::Stream::Formats.Add(Sound::MUSStream::Load);
+	Sound::Stream::Formats.Add(Sound::MIDIStream::Load);
 	sound = new Sound::SDLSystem(snd_SfxVolume / 15.f,snd_MusicVolume / 15.f);
 	int genmidinum = W_GetNumForName("GENMIDI");
 	unsigned char *Data = new unsigned char [W_LumpLength(genmidinum)];
@@ -202,7 +204,7 @@ extern "C" void S_StartSound(void *origin,int id)
 		using (Data = new unsigned char [Length])
 		{
 			W_ReadLump(sfx->lumpnum,Data);
-			S = Sound::Load(Data,Length,genmidi);
+			S = Sound::Stream::Load(Data,Length,genmidi);
 		}
 		end_using_array(Data);
 		delete [] Data;
@@ -268,7 +270,7 @@ extern "C" void S_ChangeMusic(int id,int looping)
 		{
 			unsigned short InstrumentCount;
 			W_ReadLump(music->lumpnum,Data);
-			S = Sound::Load(Data,Length,genmidi);
+			S = Sound::Stream::Load(Data,Length,genmidi);
 		}
 		end_using_array(Data);
 		delete [] Data;

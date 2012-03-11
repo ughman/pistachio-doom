@@ -16,6 +16,8 @@ namespace Sound
 		float SampleRate;
 		Vector <signed char> Buffer;
 	public:
+		static Stream *LoadDoomWave(unsigned char *Data,size_t Length,const Vector <Synth::Instrument> &Instruments);
+
 		explicit PCMStream(void *UserData,float SampleRate,signed char *Buffer,size_t Length);
 		explicit PCMStream(void *UserData,float SampleRate,unsigned char *Buffer,size_t Length);
 
