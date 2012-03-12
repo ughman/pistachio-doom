@@ -15,6 +15,7 @@ namespace IO
 		File F;
 		unsigned long LumpCount;
 		unsigned long LumpTableOffset;
+		unsigned char *LumpTable;
 	public:
 		static Archive *Load(const char *Filename);
 

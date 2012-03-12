@@ -30,14 +30,19 @@ F(Filename,false)
 	LumpTableOffset |= Header[10] << 16;
 	LumpTableOffset |= Header[11] << 24;
 	if (LumpTableOffset + LumpCount * 16 > F.Length()) throw StrException("WAD lump table out of bounds.");
+	using (LumpTable = new unsigned char [LumpCount * 16])
+	{
+		F.Read(LumpTableOffset,LumpTable,LumpCount * 16);
+	}
+	end_using_array(LumpTable);
 }
 
 unsigned int IO::WADArchive::Find(const char *Name)
 {
-	unsigned char Entry[16];
+	unsigned char *Entry;
 	for (unsigned int i = 0;i < LumpCount;i++)
 	{
-		F.Read(LumpTableOffset + i * 16,Entry,16);
+		Entry = LumpTable + i * 16;
 		if (!String::NICompare((char *)Entry + 8,Name,8))
 		{
 			return i;
@@ -54,8 +59,8 @@ String IO::WADArchive::ReverseFind(unsigned int Id)
 	}
 	else
 	{
-		unsigned char Entry[16];
-		F.Read(LumpTableOffset + Id * 16,Entry,16);
+		unsigned char *Entry;
+		Entry = LumpTable + Id * 16;
 		return String((char *)Entry + 8,8);
 	}
 }
@@ -69,8 +74,8 @@ void IO::WADArchive::Read(unsigned int Id,void *Destination)
 	}
 	else
 	{
-		unsigned char Entry[16];
-		F.Read(LumpTableOffset + Id * 16,Entry,16);
+		unsigned char *Entry;
+		Entry = LumpTable + Id * 16;
 		unsigned long Offset;
 		unsigned long Length;
 		Offset  = Entry[0];
@@ -93,8 +98,8 @@ size_t IO::WADArchive::Length(unsigned int Id)
 	}
 	else
 	{
-		unsigned char Entry[16];
-		F.Read(LumpTableOffset + Id * 16,Entry,16);
+		unsigned char *Entry;
+		Entry = LumpTable + Id * 16;
 		unsigned long Result;
 		Result  = Entry[4];
 		Result |= Entry[5] << 8;
@@ -111,4 +116,5 @@ unsigned int IO::WADArchive::Count()
 
 IO::WADArchive::~WADArchive()
 {
+	delete [] LumpTable;
 }
