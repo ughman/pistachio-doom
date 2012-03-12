@@ -26,6 +26,7 @@ size_t Sound::Synth::Voice::Play(float *Output,size_t OutLength)
 	}
 	if (!Held)
 	{
+		return 0;
 		ModulatorStage = Sound::Synth::ADSR_RELEASE;
 		CarrierStage = Sound::Synth::ADSR_RELEASE;
 	}
