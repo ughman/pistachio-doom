@@ -5,7 +5,7 @@
 IO::Archive *IO::LumpArchive::Load(const char *Filename)
 {
 	String StrFilename(Filename);
-	if (StrFilename.Length > 4 && !Memory::Compare(Filename + StrFilename.Length - 4,".lmp",4))
+	if (StrFilename.Length > 4 && !String::ICompare(Filename + StrFilename.Length - 4,".lmp"))
 	{
 		return new IO::LumpArchive(Filename);
 	}

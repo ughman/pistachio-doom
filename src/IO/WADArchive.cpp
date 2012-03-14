@@ -5,7 +5,7 @@
 IO::Archive *IO::WADArchive::Load(const char *Filename)
 {
 	String StrFilename(Filename);
-	if (StrFilename.Length > 4 && !Memory::Compare(Filename + StrFilename.Length - 4,".wad",4))
+	if (StrFilename.Length > 4 && !String::ICompare(Filename + StrFilename.Length - 4,".wad"))
 	{
 		return new IO::WADArchive(Filename);
 	}
