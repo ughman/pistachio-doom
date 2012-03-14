@@ -81,6 +81,7 @@ extern "C" void I_Error(char *error,...)
 	fprintf(stderr,"Error: ");
 	vfprintf(stderr,error,args);
 	fprintf(stderr,"\n");
+	fflush(stderr);
 	va_end(args);
 	throw StrException("I_Error called.");
 }
