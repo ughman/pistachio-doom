@@ -162,21 +162,17 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\Video\SDLSystem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Video\SDLSystem.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\Video\System.hpp"
 				>
 			</File>
-			<Filter
-				Name="SDL"
-				>
-				<File
-					RelativePath="..\src\Video\SDLSystem.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\src\Video\SDLSystem.hpp"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Sound"
@@ -214,6 +210,32 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\Sound\SDLSystem.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\Sound\SDLSystem.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\Sound\Stream.cpp"
 				>
 			</File>
@@ -225,36 +247,6 @@
 				RelativePath="..\src\Sound\System.hpp"
 				>
 			</File>
-			<Filter
-				Name="SDL"
-				>
-				<File
-					RelativePath="..\src\Sound\SDLSystem.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\src\Sound\SDLSystem.hpp"
-					>
-				</File>
-			</Filter>
 			<Filter
 				Name="Synth"
 				>
