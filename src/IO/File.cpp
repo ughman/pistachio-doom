@@ -12,6 +12,7 @@ Writable(Writable)
 
 void IO::File::Read(unsigned long Position,void *Buffer,size_t Size)
 {
+	if (Size == 0) return;
 	if (fseek(F,Position,SEEK_SET))
 	{
 		throw StrException("Failed to seek file.");
@@ -24,6 +25,7 @@ void IO::File::Read(unsigned long Position,void *Buffer,size_t Size)
 
 void IO::File::Write(unsigned long Position,const void *Buffer,size_t Size)
 {
+	if (Size == 0) return;
 	if (!Writable)
 	{
 		throw StrException("Tried to write non-writable file.");
