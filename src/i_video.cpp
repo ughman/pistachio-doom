@@ -1,6 +1,7 @@
 #include "Memory.hpp"
 #include "Video/System.hpp"
 #include "Video/SDLSystem.hpp"
+#include "Video/NullSystem.hpp"
 
 extern "C"
 {
@@ -79,5 +80,12 @@ extern "C" void I_SetPalette(byte *palette)
 
 extern "C" void I_InitGraphics()
 {
-	video = new Video::SDLSystem(SCREENWIDTH,SCREENHEIGHT,M_CheckParm("-fullscreen"));
+	if (M_CheckParm("-novideo"))
+	{
+		video = new Video::NullSystem();
+	}
+	else
+	{
+		video = new Video::SDLSystem(SCREENWIDTH,SCREENHEIGHT,M_CheckParm("-fullscreen"));
+	}
 }

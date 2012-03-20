@@ -3,6 +3,7 @@
 #include "Memory.hpp"
 #include "Sound/System.hpp"
 #include "Sound/SDLSystem.hpp"
+#include "Sound/NullSystem.hpp"
 #include "Sound/PCMStream.hpp"
 #include "Sound/MUSStream.hpp"
 #include "Sound/MIDIStream.hpp"
@@ -18,6 +19,7 @@ extern "C"
 
 #include "z_zone.h"
 #include "m_random.h"
+#include "m_argv.h"
 #include "w_wad.h"
 
 #include "doomdef.h"
@@ -103,7 +105,6 @@ extern "C" void S_Init(int sfxVolume,int musicVolume)
 	Sound::Stream::Formats.Add(Sound::PCMStream::LoadDoomWave);
 	Sound::Stream::Formats.Add(Sound::MUSStream::Load);
 	Sound::Stream::Formats.Add(Sound::MIDIStream::Load);
-	sound = new Sound::SDLSystem(snd_SfxVolume / 15.f,snd_MusicVolume / 15.f);
 	int genmidinum = W_GetNumForName("GENMIDI");
 	unsigned char *Data = new unsigned char [W_LumpLength(genmidinum)];
 	try
@@ -120,6 +121,14 @@ extern "C" void S_Init(int sfxVolume,int musicVolume)
 		throw;
 	}
 	delete [] Data;
+	if (M_CheckParm("-nosound"))
+	{
+		sound = new Sound::NullSystem(0,0);
+	}
+	else
+	{
+		sound = new Sound::SDLSystem(snd_SfxVolume / 15.f,snd_MusicVolume / 15.f);
+	}
 }
 
 extern "C" void S_Start()
