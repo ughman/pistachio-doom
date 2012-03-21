@@ -41,6 +41,11 @@ extern "C" int I_GetTime()
 	return SDL_GetTicks() / (1000 / TICRATE);
 }
 
+extern "C" void I_Delay(int tics)
+{
+	SDL_Delay(tics * 1000 / TICRATE);
+}
+
 extern "C" void I_Init()
 {
 	if (SDL_Init(0) == -1)
