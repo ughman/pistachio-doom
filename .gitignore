@@ -1,6 +1,7 @@
 # Doom game data
 *.wad
 *.lmp
+*.deh
 
 # Doom saved games
 *.dsg
