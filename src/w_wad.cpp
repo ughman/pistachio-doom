@@ -44,9 +44,12 @@ extern "C" void W_InitMultipleFiles(char **Filenames)
 
 extern "C" int W_CheckNumForName(char *Name)
 {
+	char RealName[9];
+	RealName[8] = 0;
+	strncpy(RealName,Name,8);
 	try
 	{
-		return archive->Find(Name);
+		return archive->Find(RealName);
 	}
 	catch (IO::Archive::EntryNotFoundException &Error)
 	{
@@ -56,7 +59,10 @@ extern "C" int W_CheckNumForName(char *Name)
 
 extern "C" int W_GetNumForName(char *Name)
 {
-	return archive->Find(Name);
+	char RealName[9];
+	RealName[8] = 0;
+	strncpy(RealName,Name,8);
+	return archive->Find(RealName);
 }
 
 extern "C" void W_GetNameForNum(int Lump,char *Name)
