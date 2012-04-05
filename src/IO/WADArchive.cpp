@@ -33,22 +33,35 @@ F(Filename,false)
 	using (LumpTable = new unsigned char [LumpCount * 16])
 	{
 		F.Read(LumpTableOffset,LumpTable,LumpCount * 16);
+		for (size_t i = 0;i < LumpCount;i++)
+		{
+			String LumpName((char *)LumpTable + (i * 16 + 8),8);
+			try
+			{
+				Lumps.Add(LumpName,i);
+			}
+			catch (HashTable<String,unsigned int>::DuplicateKeyException &Error)
+			{
+				Lumps.Remove(LumpName);
+				Lumps.Add(LumpName,i);
+			}
+		}
 	}
 	end_using_array(LumpTable);
 }
 
 unsigned int IO::WADArchive::Find(const char *Name)
 {
-	unsigned char *Entry;
-	for (unsigned int i = 0;i < LumpCount;i++)
+	String LumpName(Name);
+	LumpName.Uppercase();
+	try
 	{
-		Entry = LumpTable + i * 16;
-		if (!String::NICompare((char *)Entry + 8,Name,8))
-		{
-			return i;
-		}
+		return Lumps.Find(LumpName)->Value;
 	}
-	throw IO::Archive::EntryNotFoundException();
+	catch (HashTable<String,unsigned int>::KeyNotFoundException &Error)
+	{
+		throw IO::Archive::EntryNotFoundException();
+	}
 }
 
 String IO::WADArchive::ReverseFind(unsigned int Id)

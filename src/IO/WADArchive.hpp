@@ -1,6 +1,8 @@
 #ifndef IO_WADArchive_hpp
 #define IO_WADArchive_hpp
 
+#include "../String.hpp"
+#include "../HashTable.hpp"
 #include "File.hpp"
 #include "Archive.hpp"
 
@@ -16,6 +18,7 @@ namespace IO
 		unsigned long LumpCount;
 		unsigned long LumpTableOffset;
 		unsigned char *LumpTable;
+		HashTable <String,unsigned int> Lumps;
 	public:
 		static Archive *Load(const char *Filename);
 
