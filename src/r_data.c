@@ -544,8 +544,9 @@ void R_InitTextures (void)
 	    patch->patch = patchlookup[SHORT(mpatch->patch)];
 	    if (patch->patch == -1)
 	    {
-		I_Error ("R_InitTextures: Missing patch in texture %s",
-			 texture->name);
+			char name[9];
+			strncpy(name,texture->name,8);
+			I_Error("R_InitTextures: Missing patch in texture %s",name);
 	    }
 	}		
 	texturecolumnlump[i] = Z_Malloc (texture->width*2, PU_STATIC,0);
