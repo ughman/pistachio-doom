@@ -21,7 +21,12 @@ public:
 
 	bool operator==(const String &Other) const;
 
+	void Uppercase();
+	void Lowercase();
+
 	~String();
+
+	unsigned int Hash() const;
 
 	static int Compare(const char *Left,const char *Right);
 	static int ICompare(const char *Left,const char *Right);

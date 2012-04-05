@@ -63,9 +63,9 @@ String::String(const char *Source)
 	end_using_array(Value);
 }
 
-String::String(const char *Source,size_t Length)
+String::String(const char *Source,size_t MaxLength)
 {
-	Length = strnlen(Source,Length);
+	Length = strnlen(Source,MaxLength);
 	using (Value = new char [Length + 1])
 	{
 		Memory::Copy(Value,Source,Length);
@@ -88,9 +88,46 @@ bool String::operator==(const String &Other) const
 	return !Memory::Compare(Value,Other.Value,Length);
 }
 
+void String::Uppercase()
+{
+	for (size_t i = 0;i < Length;i++)
+	{
+		if (Value[i] >= 'a' && Value[i] <= 'z')
+		{
+			Value[i] -= 'a';
+			Value[i] += 'A';
+		}
+	}
+}
+
+void String::Lowercase()
+{
+	for (size_t i = 0;i < Length;i++)
+	{
+		if (Value[i] >= 'A' && Value[i] <= 'Z')
+		{
+			Value[i] -= 'A';
+			Value[i] += 'a';
+		}
+	}
+}
+
 String::~String()
 {
 	delete [] Value;
+}
+
+unsigned int String::Hash() const
+{
+	unsigned int X = 0;
+	for (size_t i = 0;i < Length;i++)
+	{
+		unsigned char Low = X;
+		X >>= CHAR_BIT;
+		X |= Low << (CHAR_BIT * (sizeof(int) - 1));
+		X ^= Value[i];
+	}
+	return X;
 }
 
 int String::Compare(const char *Left,const char *Right)
