@@ -1,6 +1,7 @@
 #include "Memory.hpp"
 #include "Video/System.hpp"
 #include "Video/SDLSystem.hpp"
+#include "Video/GLFWSystem.hpp"
 #include "Video/NullSystem.hpp"
 
 extern "C"
@@ -86,6 +87,6 @@ extern "C" void I_InitGraphics()
 	}
 	else
 	{
-		video = new Video::SDLSystem(SCREENWIDTH,SCREENHEIGHT,M_CheckParm("-fullscreen"));
+		video = new Video::GLFWSystem(800,600,M_CheckParm("-fullscreen"));
 	}
 }
