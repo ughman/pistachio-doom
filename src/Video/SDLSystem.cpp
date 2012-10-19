@@ -4,12 +4,7 @@
 
 static Video::KeySym TranslateKey(SDLKey Key)
 {
-	if (Key >= 'a' && Key <= 'z')
-	{
-		return (Video::KeySym)Key;
-		return (Video::KeySym)((Key - 'a') + 'A');
-	}
-	else switch (Key)
+	switch (Key)
 	{
 	case SDLK_BACKSPACE:
 		return Video::EVK_BACKSPACE;
