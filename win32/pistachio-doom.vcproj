@@ -107,7 +107,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32,GLFW_DLL"
+				PreprocessorDefinitions="WIN32,GLFW_DLL,NDEBUG"
 				RuntimeLibrary="0"
 				DisableSpecificWarnings="4996,4113,4047,4297"
 				ForcedIncludeFiles="$(SolutionDir)..\src\LangExt.hpp"
