@@ -4,11 +4,7 @@ Video::NullSystem::NullSystem()
 {
 }
 
-void Video::NullSystem::Read(unsigned char *Buffer)
-{
-}
-
-void Video::NullSystem::Write(unsigned char *Buffer,bool Update)
+void Video::NullSystem::Write(unsigned char *Buffer)
 {
 }
 

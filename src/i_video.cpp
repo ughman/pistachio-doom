@@ -61,12 +61,11 @@ extern "C" void I_StartTic()
 
 extern "C" void I_UpdateNoBlit()
 {
-	video->Write(screens[0],false);
 }
 
 extern "C" void I_FinishUpdate()
 {
-	video->Write(screens[0],true);
+	video->Write(screens[0]);
 }
 
 extern "C" void I_ReadScreen(byte *scr)

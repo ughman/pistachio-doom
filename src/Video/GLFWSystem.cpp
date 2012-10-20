@@ -153,24 +153,16 @@ Video::GLFWSystem::GLFWSystem(int Width,int Height,bool Fullscreen)
 	}
 }
 
-void Video::GLFWSystem::Read(unsigned char *Buffer)
-{
-	throw StrException("Video::GLFWSystem::Read not implemented.");
-}
-
-void Video::GLFWSystem::Write(unsigned char *Buffer,bool Update)
+void Video::GLFWSystem::Write(unsigned char *Buffer)
 {
 	static unsigned char Image[512 * 256 * 3];
 	for (size_t x = 0;x < 320;x++)
 	for (size_t y = 0;y < 200;y++)
 	{
-		unsigned char Color = Buffer[x + y * 320];
-		unsigned char Red   = Palette[0 + Color * 3];
-		unsigned char Green = Palette[1 + Color * 3];
-		unsigned char Blue  = Palette[2 + Color * 3];
-		Image[0 + (x + y * 512) * 3] = Red;
-		Image[1 + (x + y * 512) * 3] = Green;
-		Image[2 + (x + y * 512) * 3] = Blue;
+		unsigned char *Color = Palette + Buffer[x + y * 320] * 3;
+		Image[0 + (x + y * 512) * 3] = Color[0];
+		Image[1 + (x + y * 512) * 3] = Color[1];
+		Image[2 + (x + y * 512) * 3] = Color[2];
 	}
 	double tx2 = 320 / 512.0;
 	double ty2 = 200 / 256.0;
@@ -189,10 +181,7 @@ void Video::GLFWSystem::Write(unsigned char *Buffer,bool Update)
 		glTexCoord2d(0,ty2);
 		glVertex2d(0,200);
 	glEnd();
-	if (Update)
-	{
-		glfwSwapBuffers();
-	}
+	glfwSwapBuffers();
 }
 
 void Video::GLFWSystem::SetPalette(unsigned char *Palette)

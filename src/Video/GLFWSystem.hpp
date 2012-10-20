@@ -20,8 +20,7 @@ namespace Video
 
 		explicit GLFWSystem(int Width,int Height,bool Fullscreen);
 
-		virtual void Read(unsigned char *Buffer);
-		virtual void Write(unsigned char *Buffer,bool Update);
+		virtual void Write(unsigned char *Buffer);
 		virtual void SetPalette(unsigned char *Palette);
 
 		virtual bool Update(Event *E);

@@ -74,26 +74,7 @@ Height(Height)
 	}
 }
 
-void Video::SDLSystem::Read(unsigned char *Buffer)
-{
-	if (SDL_LockSurface(Screen) == -1)
-	{
-		throw StrException("SDL surface lock failed.");
-	}
-	unsigned char *Pixels = (unsigned char *)Screen->pixels;
-	short Pitch = Screen->pitch;
-	for (int x = 0;x < Width;x++)
-	{
-		for (int y = 0;y < Height;y++)
-		{
-			Buffer[x + y * Width] = Pixels[x + y * Pitch];
-		}
-	}
-	SDL_UnlockSurface(Screen);
-	SDL_UpdateRect(Screen,0,0,Width,Height);
-}
-
-void Video::SDLSystem::Write(unsigned char *Buffer,bool Update)
+void Video::SDLSystem::Write(unsigned char *Buffer)
 {
 	if (SDL_LockSurface(Screen) == -1)
 	{
@@ -106,10 +87,7 @@ void Video::SDLSystem::Write(unsigned char *Buffer,bool Update)
 		Memory::Copy(Pixels + y * Pitch,Buffer + y * Width,Width);
 	}
 	SDL_UnlockSurface(Screen);
-	if (Update)
-	{
-		SDL_UpdateRect(Screen,0,0,Width,Height);
-	}
+	SDL_Flip(Screen);
 }
 
 void Video::SDLSystem::SetPalette(unsigned char *Palette)
