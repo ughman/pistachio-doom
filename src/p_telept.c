@@ -104,7 +104,10 @@ EV_Teleport
 		if (!P_TeleportMove (thing, m->x, m->y))
 		    return 0;
 		
-		thing->z = thing->floorz;  //fixme: not needed?
+		if (!M_CheckParm("-compat-final"))
+		{
+			thing->z = thing->floorz;  //fixme: not needed?
+		}
 		if (thing->player)
 		    thing->player->viewz = thing->z+thing->player->viewheight;
 				

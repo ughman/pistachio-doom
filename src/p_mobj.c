@@ -292,7 +292,10 @@ void P_ZMovement (mobj_t* mo)
 	if (mo->flags & MF_SKULLFLY)
 	{
 	    // the skull slammed into something
-	    mo->momz = -mo->momz;
+		if (!M_CheckParm("-compat-doom2"))
+		{
+			mo->momz = -mo->momz;
+		}
 	}
 	
 	if (mo->momz < 0)
