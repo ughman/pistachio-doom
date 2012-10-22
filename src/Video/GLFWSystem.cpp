@@ -139,6 +139,7 @@ Video::GLFWSystem::GLFWSystem(int Width,int Height,bool Fullscreen)
 		}
 		VideoSystem = this;
 		glfwDisable(GLFW_MOUSE_CURSOR);
+		glfwDisable(GLFW_AUTO_POLL_EVENTS);
 		WindowResizeCallback(Width,Height);
 		glfwSetKeyCallback(KeyCallback);
 		glfwSetMousePosCallback(MouseMoveCallback);
