@@ -81,11 +81,9 @@ static void MouseCallback()
 	glfwGetMousePos(&x,&y);
 	Video::Event Event;
 	Event.Type = Video::EVT_MOUSE;
-	Event.Mouse.Buttons = glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) | (glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) << 2);
-	for (int i = 0;i <= GLFW_MOUSE_BUTTON_LAST;i++)
-	{
-		Event.Mouse.Buttons |= (glfwGetMouseButton(i) == GLFW_PRESS) << i;
-	}
+	Event.Mouse.Buttons  = glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT);
+	Event.Mouse.Buttons |= glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) << 2;
+	Event.Mouse.Buttons |= glfwGetMouseButton(GLFW_MOUSE_BUTTON_MIDDLE) << 1;
 	Event.Mouse.XOffset = x * 4;
 	Event.Mouse.YOffset = y * -4;
 	EventQueue.Enqueue(Event);
