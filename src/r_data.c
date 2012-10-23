@@ -545,6 +545,7 @@ void R_InitTextures (void)
 	    if (patch->patch == -1)
 	    {
 			char name[9];
+			name[8] = 0;
 			strncpy(name,texture->name,8);
 			I_Error("R_InitTextures: Missing patch in texture %s",name);
 	    }
