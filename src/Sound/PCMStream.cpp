@@ -42,17 +42,12 @@ size_t Sound::PCMStream::Play(float *Output,size_t OutLength)
 	size_t i;
 	for (i = 0;i < OutLength;i++)
 	{
-		Output[i] += Buffer[0];
-		Offset += SampleRate / 11025;
-		while (Offset >= 1)
+		if ((int)Offset >= Buffer.Length)
 		{
-			Offset -= 1;
-			Buffer.Remove(0,1);
-			if (Buffer.Length == 0)
-			{
-				return i + 1;
-			}
+			return i;
 		}
+		Output[i] += Buffer[(int)Offset];
+		Offset += SampleRate / 11025;
 	}
 	return OutLength;
 }
