@@ -290,9 +290,6 @@ void R_InitSpriteDefs (char** namelist)
 //
 // GAME FUNCTIONS
 //
-vissprite_t	vissprites[MAXVISSPRITES];
-vissprite_t*	vissprite_p;
-int		newvissprite;
 
 
 
@@ -310,32 +307,6 @@ void R_InitSprites (char** namelist)
     }
 	
     R_InitSpriteDefs (namelist);
-}
-
-
-
-//
-// R_ClearSprites
-// Called at frame start.
-//
-void R_ClearSprites (void)
-{
-    vissprite_p = vissprites;
-}
-
-
-//
-// R_NewVisSprite
-//
-vissprite_t	overflowsprite;
-
-vissprite_t* R_NewVisSprite (void)
-{
-    if (vissprite_p == &vissprites[MAXVISSPRITES])
-	return &overflowsprite;
-    
-    vissprite_p++;
-    return vissprite_p-1;
 }
 
 
@@ -781,65 +752,6 @@ void R_DrawPlayerSprites (void)
 
 
 
-
-//
-// R_SortVisSprites
-//
-vissprite_t	vsprsortedhead;
-
-
-void R_SortVisSprites (void)
-{
-    int			i;
-    int			count;
-    vissprite_t*	ds;
-    vissprite_t*	best;
-    vissprite_t		unsorted;
-    fixed_t		bestscale;
-
-    count = vissprite_p - vissprites;
-	
-    unsorted.next = unsorted.prev = &unsorted;
-
-    if (!count)
-	return;
-		
-    for (ds=vissprites ; ds<vissprite_p ; ds++)
-    {
-	ds->next = ds+1;
-	ds->prev = ds-1;
-    }
-    
-    vissprites[0].prev = &unsorted;
-    unsorted.next = &vissprites[0];
-    (vissprite_p-1)->next = &unsorted;
-    unsorted.prev = vissprite_p-1;
-    
-    // pull the vissprites out by scale
-    //best = 0;		// shut up the compiler warning
-    vsprsortedhead.next = vsprsortedhead.prev = &vsprsortedhead;
-    for (i=0 ; i<count ; i++)
-    {
-	bestscale = MAXINT;
-	for (ds=unsorted.next ; ds!= &unsorted ; ds=ds->next)
-	{
-	    if (ds->scale < bestscale)
-	    {
-		bestscale = ds->scale;
-		best = ds;
-	    }
-	}
-	best->next->prev = best->prev;
-	best->prev->next = best->next;
-	best->next = &vsprsortedhead;
-	best->prev = vsprsortedhead.prev;
-	vsprsortedhead.prev->next = best;
-	vsprsortedhead.prev = best;
-    }
-}
-
-
-
 //
 // R_DrawSprite
 //
@@ -952,42 +864,3 @@ void R_DrawSprite (vissprite_t* spr)
     mceilingclip = cliptop;
     R_DrawVisSprite (spr, spr->x1, spr->x2);
 }
-
-
-
-
-//
-// R_DrawMasked
-//
-void R_DrawMasked (void)
-{
-    vissprite_t*	spr;
-    drawseg_t*		ds;
-	
-    R_SortVisSprites ();
-
-    if (vissprite_p > vissprites)
-    {
-	// draw all vissprites back to front
-	for (spr = vsprsortedhead.next ;
-	     spr != &vsprsortedhead ;
-	     spr=spr->next)
-	{
-	    
-	    R_DrawSprite (spr);
-	}
-    }
-    
-    // render any remaining masked mid textures
-    for (ds=ds_p-1 ; ds >= drawsegs ; ds--)
-	if (ds->maskedtexturecol)
-	    R_RenderMaskedSegRange (ds, ds->x1, ds->x2);
-    
-    // draw the psprites on top of everything
-    //  but does not draw on side views
-    if (!viewangleoffset)		
-	R_DrawPlayerSprites ();
-}
-
-
-
