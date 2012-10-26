@@ -314,6 +314,11 @@ void P_ZMovement (mobj_t* mo)
 	}
 	mo->z = mo->floorz;
 
+	if (M_CheckParm("-compat-doom2"))
+	{
+		mo->momz = -mo->momz;
+	}
+
 	if ( (mo->flags & MF_MISSILE)
 	     && !(mo->flags & MF_NOCLIP) )
 	{
