@@ -642,8 +642,7 @@ void IdentifyVersion (void)
 	strcpy (basedefault,DEVDATA"default.cfg");
 	return;
     }
-#define R_OK 4
-    if ( !access (doom2fwad,R_OK) )
+    if (M_CheckParm("-game-doom2f"))
     {
 	gamemode = commercial;
 	// C'est ridicule!
@@ -654,42 +653,42 @@ void IdentifyVersion (void)
 	return;
     }
 
-    if ( !access (doom2wad,R_OK) )
+    if (M_CheckParm("-game-doom2"))
     {
 	gamemode = commercial;
 	D_AddFile (doom2wad);
 	return;
     }
 
-    if ( !access (plutoniawad, R_OK ) )
+    if (M_CheckParm("-game-plutonia"))
     {
       gamemode = commercial;
       D_AddFile (plutoniawad);
       return;
     }
 
-    if ( !access ( tntwad, R_OK ) )
+    if (M_CheckParm("-game-tnt"))
     {
       gamemode = commercial;
       D_AddFile (tntwad);
       return;
     }
 
-    if ( !access (doomuwad,R_OK) )
+    if (M_CheckParm("-game-doomu"))
     {
       gamemode = retail;
       D_AddFile (doomuwad);
       return;
     }
 
-    if ( !access (doomwad,R_OK) )
+    if (M_CheckParm("-game-doom"))
     {
       gamemode = registered;
       D_AddFile (doomwad);
       return;
     }
 
-    if ( !access (doom1wad,R_OK) )
+    if (M_CheckParm("-game-doom1"))
     {
       gamemode = shareware;
       D_AddFile (doom1wad);
