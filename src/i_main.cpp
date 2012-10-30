@@ -1,5 +1,6 @@
 #include <cstdio>
 
+#include "Legacy.hpp"
 #include "Exception.hpp"
 
 extern "C"
@@ -17,7 +18,10 @@ int main(int argc,char **argv)
 	try
 #endif
 	{
+		Core::System Sys;
+		LEGACY_ENTER(&Sys);
 		D_DoomMain();
+		LEGACY_LEAVE();
 	}
 #ifdef NDEBUG
 	catch (Exception &Error)

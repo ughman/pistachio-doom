@@ -325,6 +325,14 @@
 		<Filter
 			Name="Legacy"
 			>
+			<File
+				RelativePath="..\src\Legacy.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Legacy.hpp"
+				>
+			</File>
 			<Filter
 				Name="m_ Source Files"
 				>
@@ -1117,6 +1125,18 @@
 			</File>
 			<File
 				RelativePath="..\src\IO\WADArchive.hpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Core"
+			>
+			<File
+				RelativePath="..\src\Core\System.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Core\System.hpp"
 				>
 			</File>
 		</Filter>
