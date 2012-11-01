@@ -18,7 +18,7 @@ int main(int argc,char **argv)
 	try
 #endif
 	{
-		Core::System Sys;
+		Core::System Sys(M_CheckParm("-fullscreen"));
 		LEGACY_ENTER(&Sys);
 		D_DoomMain();
 		LEGACY_LEAVE();

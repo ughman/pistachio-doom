@@ -1,8 +1,6 @@
 #include "Memory.hpp"
+#include "Legacy.hpp"
 #include "Video/System.hpp"
-#include "Video/SDLSystem.hpp"
-#include "Video/GLFWSystem.hpp"
-#include "Video/NullSystem.hpp"
 
 extern "C"
 {
@@ -15,12 +13,8 @@ extern "C"
 #include "doomdef.h"
 }
 
-Video::System *video = 0;
-
 extern "C" void I_ShutdownGraphics()
 {
-	delete video;
-	video = 0;
 }
 
 extern "C" void I_StartFrame()
@@ -34,7 +28,7 @@ extern "C" void I_StartTic()
 	static unsigned int buttons = 0;
 	Video::Event e;
 	event_t de;
-	while (video->Update(&e))
+	while (Pistachio->Video->Update(&e))
 	{
 		switch (e.Type)
 		{
@@ -65,7 +59,7 @@ extern "C" void I_UpdateNoBlit()
 
 extern "C" void I_FinishUpdate()
 {
-	video->Write(screens[0]);
+	Pistachio->Video->Write(screens[0]);
 }
 
 extern "C" void I_ReadScreen(byte *scr)
@@ -75,17 +69,9 @@ extern "C" void I_ReadScreen(byte *scr)
 
 extern "C" void I_SetPalette(byte *palette)
 {
-	video->SetPalette(palette);
+	Pistachio->Video->SetPalette(palette);
 }
 
 extern "C" void I_InitGraphics()
 {
-	if (M_CheckParm("-novideo"))
-	{
-		video = new Video::NullSystem();
-	}
-	else
-	{
-		video = new Video::GLFWSystem(800,600,M_CheckParm("-fullscreen"));
-	}
 }

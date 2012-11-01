@@ -2,6 +2,7 @@
 #define Core_System_hpp
 
 #include "../Sound/System.hpp"
+#include "../Video/System.hpp"
 
 namespace Core
 {
@@ -12,8 +13,9 @@ namespace Core
 		System &operator=(const System &);
 	public:
 		Sound::System *Sound;
+		Video::System *Video;
 
-		System();
+		System(bool Fullscreen);
 
 		~System();
 	};
