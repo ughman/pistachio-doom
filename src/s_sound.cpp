@@ -1,9 +1,8 @@
 #include "Math.hpp"
 #include "Vector.hpp"
 #include "Memory.hpp"
+#include "Legacy.hpp"
 #include "Sound/System.hpp"
-#include "Sound/SDLSystem.hpp"
-#include "Sound/NullSystem.hpp"
 #include "Sound/PCMStream.hpp"
 #include "Sound/MUSStream.hpp"
 #include "Sound/MIDIStream.hpp"
@@ -30,8 +29,6 @@ extern "C"
 
 int snd_MusicVolume;
 int snd_SfxVolume;
-
-Sound::System *sound = 0;
 
 Vector <Sound::Synth::Instrument> genmidi(175);
 
@@ -121,19 +118,11 @@ extern "C" void S_Init(int sfxVolume,int musicVolume)
 		throw;
 	}
 	delete [] Data;
-	if (M_CheckParm("-nosound"))
-	{
-		sound = new Sound::NullSystem(0,0);
-	}
-	else
-	{
-		sound = new Sound::SDLSystem(snd_SfxVolume / 15.f,snd_MusicVolume / 15.f);
-	}
 }
 
 extern "C" void S_Start()
 {
-	sound->StopAll();
+	Pistachio->Sound->StopAll();
 	switch (gamemode)
 	{
 	case shareware:
@@ -197,7 +186,7 @@ extern "C" void S_StartSound(void *origin,int id)
 	Sound::Stream *S = (Sound::Stream *)sfx->data;
 	if (origin)
 	{
-		sound->StopSound(origin);
+		Pistachio->Sound->StopSound(origin);
 	}
 	if (sfx->lumpnum == 0)
 	{
@@ -219,12 +208,12 @@ extern "C" void S_StartSound(void *origin,int id)
 		delete [] Data;
 		sfx->data = S;
 	}
-	sound->PlaySound(S,origin);
+	Pistachio->Sound->PlaySound(S,origin);
 }
 
 extern "C" void S_StopSound(void *origin)
 {
-	sound->StopSound(origin);
+	Pistachio->Sound->StopSound(origin);
 }
 
 extern "C" void S_PauseSound()
@@ -245,13 +234,13 @@ extern "C" void S_UpdateSounds(void *listener)
 extern "C" void S_SetMusicVolume(int volume)
 {
 	snd_MusicVolume = volume;
-	sound->MusicVolume = volume / 15.f;
+	Pistachio->Sound->MusicVolume = volume / 15.f;
 }
 
 extern "C" void S_SetSfxVolume(int volume)
 {
 	snd_SfxVolume = volume;
-	sound->SoundVolume = volume / 15.f;
+	Pistachio->Sound->SoundVolume = volume / 15.f;
 }
 
 extern "C" void S_StartMusic(int id)
@@ -263,7 +252,7 @@ extern "C" void S_ChangeMusic(int id,int looping)
 {
 	musicinfo_t *music = S_music + id;
 	Sound::Stream *S = (Sound::Stream *)music->data;
-	sound->StopMusic(sound);
+	Pistachio->Sound->StopMusic(0);
 	if (music->lumpnum == 0)
 	{
 		char Name[9];
@@ -293,5 +282,5 @@ extern "C" void S_ChangeMusic(int id,int looping)
 		end_using(S);
 		music->data = S;
 	}
-	sound->PlayMusic(S,sound);
+	Pistachio->Sound->PlayMusic(S,0);
 }
