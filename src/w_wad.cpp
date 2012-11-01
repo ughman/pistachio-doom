@@ -1,4 +1,4 @@
-#include "IO/Archive.hpp"
+#include "Legacy.hpp"
 #include "IO/MultiArchive.hpp"
 #include "IO/LumpArchive.hpp"
 #include "IO/WADArchive.hpp"
@@ -13,8 +13,6 @@ extern "C"
 #include "w_wad.h"
 }
 
-IO::MultiArchive *archive = 0;
-
 // W_AddFile
 
 extern "C" void W_Reload()
@@ -26,12 +24,11 @@ extern "C" void W_InitMultipleFiles(char **Filenames)
 {
 	IO::Archive::Formats.Add(IO::LumpArchive::Load);
 	IO::Archive::Formats.Add(IO::WADArchive::Load);
-	archive = new IO::MultiArchive();
 	while (*Filenames && **Filenames)
 	{
 		using (IO::Archive *A = IO::Archive::Load(*Filenames))
 		{
-			archive->Add(A);
+			Pistachio->Data->Add(A);
 		}
 		end_using(A);
 		Filenames++;
@@ -49,7 +46,7 @@ extern "C" int W_CheckNumForName(char *Name)
 	strncpy(RealName,Name,8);
 	try
 	{
-		return archive->Find(RealName);
+		return Pistachio->Data->Find(RealName);
 	}
 	catch (IO::Archive::EntryNotFoundException &Error)
 	{
@@ -62,18 +59,18 @@ extern "C" int W_GetNumForName(char *Name)
 	char RealName[9];
 	RealName[8] = 0;
 	strncpy(RealName,Name,8);
-	return archive->Find(RealName);
+	return Pistachio->Data->Find(RealName);
 }
 
 extern "C" void W_GetNameForNum(int Lump,char *Name)
 {
-	String Result = archive->ReverseFind(Lump);
+	String Result = Pistachio->Data->ReverseFind(Lump);
 	strncpy(Name,Result.Value,8);
 }
 
 extern "C" int W_LumpLength(int Lump)
 {
-	return archive->Length(Lump);
+	return Pistachio->Data->Length(Lump);
 }
 
 void **lumpcache = 0;
@@ -86,7 +83,7 @@ extern "C" void W_ReadLump(int Lump,void *Destination)
 	}
 	else
 	{
-		archive->Read(Lump,Destination);
+		Pistachio->Data->Read(Lump,Destination);
 	}
 }
 
@@ -94,13 +91,13 @@ extern "C" void *W_CacheLumpNum(int Lump,int Tag)
 {
 	if (!lumpcache)
 	{
-		lumpcache = new void * [archive->Count()];
-		memset(lumpcache,0,archive->Count() * sizeof(void *));
+		lumpcache = new void * [Pistachio->Data->Count()];
+		memset(lumpcache,0,Pistachio->Data->Count() * sizeof(void *));
 	}
 	if (!lumpcache[Lump])
 	{
 		lumpcache[Lump] = Z_Malloc(W_LumpLength(Lump),Tag,lumpcache + Lump);
-		archive->Read(Lump,lumpcache[Lump]);
+		Pistachio->Data->Read(Lump,lumpcache[Lump]);
 	}
 	return lumpcache[Lump];
 }

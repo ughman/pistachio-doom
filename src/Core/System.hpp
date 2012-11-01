@@ -3,6 +3,7 @@
 
 #include "../Sound/System.hpp"
 #include "../Video/System.hpp"
+#include "../IO/MultiArchive.hpp"
 
 namespace Core
 {
@@ -14,6 +15,7 @@ namespace Core
 	public:
 		Sound::System *Sound;
 		Video::System *Video;
+		IO::MultiArchive *Data;
 
 		System(bool Fullscreen);
 

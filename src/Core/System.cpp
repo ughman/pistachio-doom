@@ -27,12 +27,18 @@ Core::System::System(bool Fullscreen)
 			// TODO :: Report error
 			Video = new Video::NullSystem();
 		}
+		using (Video)
+		{
+			Data = new IO::MultiArchive();
+		}
+		end_using(Video);
 	}
 	end_using(Sound);
 }
 
 Core::System::~System()
 {
+	delete Data;
 	delete Video;
 	delete Sound;
 }
