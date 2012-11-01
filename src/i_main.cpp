@@ -2,6 +2,7 @@
 
 #include "Legacy.hpp"
 #include "Exception.hpp"
+#include "Core/Init.hpp"
 
 extern "C"
 {
@@ -18,6 +19,7 @@ int main(int argc,char **argv)
 	try
 #endif
 	{
+		Core::Init();
 		Core::System Sys(M_CheckParm("-fullscreen"));
 		LEGACY_ENTER(&Sys);
 		D_DoomMain();

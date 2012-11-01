@@ -99,9 +99,6 @@ static void S_LoadGMInstrument(unsigned char *Data,Sound::Synth::Instrument *I)
 
 extern "C" void S_Init(int sfxVolume,int musicVolume)
 {
-	Sound::Stream::Formats.Add(Sound::PCMStream::LoadDoomWave);
-	Sound::Stream::Formats.Add(Sound::MUSStream::Load);
-	Sound::Stream::Formats.Add(Sound::MIDIStream::Load);
 	int genmidinum = W_GetNumForName("GENMIDI");
 	unsigned char *Data = new unsigned char [W_LumpLength(genmidinum)];
 	try

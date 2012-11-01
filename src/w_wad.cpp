@@ -22,8 +22,6 @@ extern "C" void W_Reload()
 
 extern "C" void W_InitMultipleFiles(char **Filenames)
 {
-	IO::Archive::Formats.Add(IO::LumpArchive::Load);
-	IO::Archive::Formats.Add(IO::WADArchive::Load);
 	while (*Filenames && **Filenames)
 	{
 		using (IO::Archive *A = IO::Archive::Load(*Filenames))

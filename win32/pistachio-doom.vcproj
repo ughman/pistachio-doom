@@ -1132,6 +1132,14 @@
 			Name="Core"
 			>
 			<File
+				RelativePath="..\src\Core\Init.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Core\Init.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\Core\System.cpp"
 				>
 			</File>
