@@ -526,23 +526,6 @@ char            title[128];
 
 
 //
-// D_AddFile
-//
-void D_AddFile (char *file)
-{
-    int     numwadfiles;
-    char    *newfile;
-	
-    for (numwadfiles = 0 ; wadfiles[numwadfiles] ; numwadfiles++)
-	;
-
-    newfile = malloc (strlen(file)+1);
-    strcpy (newfile, file);
-	
-    wadfiles[numwadfiles] = newfile;
-}
-
-//
 // IdentifyVersion
 // Checks availability of IWAD files by name,
 // to determine whether registered/commercial features
