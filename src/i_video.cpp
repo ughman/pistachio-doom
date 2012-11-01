@@ -13,16 +13,6 @@ extern "C"
 #include "doomdef.h"
 }
 
-extern "C" void I_ShutdownGraphics()
-{
-}
-
-extern "C" void I_StartFrame()
-{
-}
-
-// I_GetEvent()
-
 extern "C" void I_StartTic()
 {
 	static unsigned int buttons = 0;
@@ -53,10 +43,6 @@ extern "C" void I_StartTic()
 	}
 }
 
-extern "C" void I_UpdateNoBlit()
-{
-}
-
 extern "C" void I_FinishUpdate()
 {
 	Pistachio->Video->Write(screens[0]);
@@ -70,8 +56,4 @@ extern "C" void I_ReadScreen(byte *scr)
 extern "C" void I_SetPalette(byte *palette)
 {
 	Pistachio->Video->SetPalette(palette);
-}
-
-extern "C" void I_InitGraphics()
-{
 }

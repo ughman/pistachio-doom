@@ -18,17 +18,10 @@ extern "C"
 
 ticcmd_t ticcmd;
 
-extern "C" void I_Tactile(int on,int off,int total)
-{
-	// TODO
-}
-
 extern "C" ticcmd_t *I_BaseTiccmd()
 {
 	return &ticcmd;
 }
-
-// I_GetHeapSize()
 
 extern "C" byte *I_ZoneBase(int *size)
 {
@@ -57,7 +50,6 @@ extern "C" void I_Init()
 extern "C" void I_Quit()
 {
 	D_QuitNetGame ();
-	I_ShutdownGraphics();
     M_SaveDefaults ();
 	SDL_Quit();
     exit(0);
@@ -67,10 +59,6 @@ extern "C" void I_WaitVBL(int count)
 {
 	// TODO
 }
-
-// I_BeginRead()
-
-// I_EndRead()
 
 extern "C" byte *I_AllocLow(int length)
 {

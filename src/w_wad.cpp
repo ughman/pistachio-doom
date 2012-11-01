@@ -13,29 +13,10 @@ extern "C"
 #include "w_wad.h"
 }
 
-// W_AddFile
-
 extern "C" void W_Reload()
 {
 	// TODO
 }
-
-extern "C" void W_InitMultipleFiles(char **Filenames)
-{
-	while (*Filenames && **Filenames)
-	{
-		using (IO::Archive *A = IO::Archive::Load(*Filenames))
-		{
-			Pistachio->Data->Add(A);
-		}
-		end_using(A);
-		Filenames++;
-	}
-}
-
-// W_InitFile
-
-// W_NumLumps
 
 extern "C" int W_CheckNumForName(char *Name)
 {
@@ -104,5 +85,3 @@ extern "C" void *W_CacheLumpName(char *Name,int Tag)
 {
 	return W_CacheLumpNum(W_GetNumForName(Name),Tag);
 }
-
-// W_Profile
