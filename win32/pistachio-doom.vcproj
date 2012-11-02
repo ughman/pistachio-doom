@@ -603,10 +603,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\i_sound.h"
-					>
-				</File>
-				<File
 					RelativePath="..\src\i_system.h"
 					>
 				</File>

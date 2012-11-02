@@ -8,7 +8,6 @@ extern "C"
 #include "doomdef.h"
 #include "m_misc.h"
 #include "i_video.h"
-#include "i_sound.h"
 
 #include "d_net.h"
 #include "g_game.h"

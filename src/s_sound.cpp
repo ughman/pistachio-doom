@@ -12,7 +12,6 @@
 extern "C"
 {
 #include "i_system.h"
-#include "i_sound.h"
 #include "sounds.h"
 #include "s_sound.h"
 
